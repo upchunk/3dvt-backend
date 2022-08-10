@@ -3,19 +3,19 @@ from django.contrib.auth.models import AbstractUser
 
 
 def upload_to(instance, filename):  # explicitly set upload path and filename
-    return 'images/{filename}'.format(filename=filename)
+    return 'images/{filename/%Y/%m/%d}'.format(filename=filename)
 
 
 def ImageDataset(instance, filename):  # explicitly set upload path and filename
-    return 'imageData/{filename}'.format(filename=filename)
+    return 'imageData/{filename/%Y/%m/%d}'.format(filename=filename)
 
 
 def MappingDataset(instance, filename):  # explicitly set upload path and filename
-    return 'mappingData/{filename}'.format(filename=filename)
+    return 'mappingData/{filename/%Y/%m/%d}'.format(filename=filename)
 
 
 def ResultDataset(instance, filename):  # explicitly set upload path and filename
-    return 'resultData/{filename}'.format(filename=filename)
+    return 'resultData/{filename/%Y/%m/%d}'.format(filename=filename)
 
 
 class Users(AbstractUser):
