@@ -14,6 +14,10 @@ def MappingDataset(instance, filename):  # explicitly set upload path and filena
     return 'mappingData/{filename}'.format(filename=filename)
 
 
+def ResultDataset(instance, filename):  # explicitly set upload path and filename
+    return 'resultData/{filename}'.format(filename=filename)
+
+
 class Users(AbstractUser):
     avatar = models.ImageField(upload_to=upload_to, null=True, blank=True)
 
@@ -22,3 +26,10 @@ class ImageData(models.Model):
     user = models.ForeignKey(Users, on_delete=models.CASCADE)
     images = models.FileField(upload_to=ImageDataset, null=True, blank=True)
     mapping = models.FileField(upload_to=MappingDataset, null=True, blank=True)
+
+
+class ResultData(models.Model):
+    user = models.ForeignKey(Users, on_delete=models.CASCADE)
+    source = models.ForeignKey(ImageData, on_delete=models.CASCADE)
+    result_Images = models.FileField(
+        upload_to=ResultDataset, null=True, blank=True)

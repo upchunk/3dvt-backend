@@ -15,3 +15,9 @@ class DataViewSet(viewsets.ModelViewSet):
     serializer_class = DataSerializer
     parser_classes = (MultiPartParser, FormParser)
     queryset = ImageData.objects.all()
+
+
+class ResultViewSet(viewsets.ModelViewSet):
+    serializer_class = ResultSerializer
+    parser_classes = (MultiPartParser, FormParser)
+    queryset = ResultData.objects.all()

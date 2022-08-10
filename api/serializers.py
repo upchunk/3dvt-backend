@@ -13,3 +13,9 @@ class DataSerializer(serializers.ModelSerializer):
     class Meta:
         model = ImageData
         fields = "__all__"
+
+
+class ResultSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ResultData
+        fields = "__all__"
