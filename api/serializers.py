@@ -149,9 +149,21 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         return instance
 
 
-class DataSerializer(serializers.ModelSerializer):
+class ImageDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = ImageData
+        fields = "__all__"
+
+
+class MappingDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MappingData
+        fields = "__all__"
+
+
+class ResultDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ResultData
         fields = "__all__"
 
 
@@ -159,12 +171,6 @@ class TaskHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskHistory
         fields = '__all__'
-
-
-class ResultSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ResultData
-        fields = "__all__"
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):

@@ -96,13 +96,23 @@ class CustomAuthToken(ObtainAuthToken):
                         })
 
 
-class DataViewSet(viewsets.ModelViewSet):
-    serializer_class = DataSerializer
-    parser_classes = (MultiPartParser, FormParser)
+class ImageDataViewSet(viewsets.ModelViewSet):
+    serializer_class = ImageDataSerializer
     queryset = ImageData.objects.all()
 
 
-class ResultViewSet(viewsets.ModelViewSet):
-    serializer_class = ResultSerializer
+class MappingDataViewSet(viewsets.ModelViewSet):
+    serializer_class = MappingDataSerializer
+    parser_classes = (MultiPartParser, FormParser)
+    queryset = MappingData.objects.all()
+
+
+class ResultDataViewSet(viewsets.ModelViewSet):
+    serializer_class = ResultDataSerializer
     parser_classes = (MultiPartParser, FormParser)
     queryset = ResultData.objects.all()
+
+
+class TaskHistoryViewSet(viewsets.ModelViewSet):
+    serializer_class = TaskHistorySerializer
+    queryset = TaskHistory.objects.all()

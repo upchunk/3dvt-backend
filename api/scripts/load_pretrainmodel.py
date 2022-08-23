@@ -20,8 +20,11 @@ import PIL
 #######################################################################
 # Predict on a few images
 model = simple_unet_model(448, 448, 1)
-# Trained for 50 epochs and then additional 100
-model.load_weights('model_tesis_epoch20_sz448.hdf5')
+
+if model == simple_unet_model(448, 448, 1):
+    # Trained for 50 epochs and then additional 100
+    model.load_weights('model_tesis_epoch20_sz448.hdf5')
+
 # model.load_weights('mitochondria_gpu_tf1.4.hdf5')  #Trained for 50 epochs
 
 

@@ -1,6 +1,5 @@
 from django.db import models
-# from django.contrib.auth.models import AbstractUser
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
 
 def upload_to(instance, filename):  # explicitly set upload path and filename
@@ -19,7 +18,7 @@ def ResultDataset(instance, filename):  # explicitly set upload path and filenam
     return 'resultData/{filename/%Y/%m/%d}'.format(filename=filename)
 
 
-class Users(User):
+class Users(AbstractUser):
     avatar = models.ImageField(upload_to=upload_to, null=True, blank=True)
     apikey = models.CharField(max_length=50, null=True, blank=True)
 
@@ -27,15 +26,11 @@ class Users(User):
 class ImageData(models.Model):
     user = models.ForeignKey(Users, on_delete=models.CASCADE)
     images = models.FileField(upload_to=ImageDataset, null=True, blank=True)
+
+
+class MappingData(models.Model):
+    image = models.ForeignKey(ImageData, on_delete=models.CASCADE)
     mapping = models.FileField(upload_to=MappingDataset, null=True, blank=True)
-
-
-class TaskHistory(models.Model):
-
-    userid = models.ForeignKey(Users, on_delete=models.CASCADE)
-    status = models.CharField(max_length=50, null=True, blank=True)
-    type = models.CharField(max_length=50, null=True, blank=True)
-    createdate = models.DateTimeField(auto_now_add=True, blank=True)
 
 
 class ResultData(models.Model):
@@ -43,3 +38,13 @@ class ResultData(models.Model):
     source = models.ForeignKey(ImageData, on_delete=models.CASCADE)
     result_Images = models.FileField(
         upload_to=ResultDataset, null=True, blank=True)
+
+
+class TaskHistory(models.Model):
+
+    userid = models.ForeignKey(Users, on_delete=models.CASCADE)
+    status = models.CharField(max_length=50, null=True, blank=True)
+    model = models.CharField(max_length=50, null=True, blank=True)
+    type = models.CharField(max_length=50, null=True, blank=True)
+    createdate = models.DateTimeField(auto_now_add=True, blank=True)
+    result = models.ForeignKey(ResultData, on_delete=models.CASCADE)
