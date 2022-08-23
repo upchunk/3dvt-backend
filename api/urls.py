@@ -1,11 +1,28 @@
-from . import views
+from .views import *
+from django.urls import path
 from rest_framework.routers import DefaultRouter
+from rest_framework_simplejwt.views import (
+    TokenRefreshView,
+)
+
 
 router = DefaultRouter()
 
-router.register(r'users', views.UserViewSet, basename='users')
-router.register(r'dataset', views.DataViewSet, basename='dataset')
-router.register(r'result', views.ResultViewSet, basename='result')
+router.register(r'users', UserViewSet, basename='users')
+router.register(r'dataset', DataViewSet, basename='dataset')
+router.register(r'group', GroupViewSet, basename='groups')
+router.register(r'result', ResultViewSet, basename='result')
 
-urlpatterns = []
+urlpatterns = [
+    path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('apikey/', CustomAuthToken.as_view(), name='custom_auth_token'),
+    path('register/', RegisterView.as_view(), name='auth_register'),
+    path('change_password/<int:pk>/', ChangePasswordView.as_view(),
+         name='auth_change_password'),
+    path('update_profile/<int:pk>/', UpdateProfileView.as_view(),
+         name='auth_update_profile'),
+    path('logout/', LogoutView.as_view(), name='auth_logout'),
+    path('logout/all/', LogoutAllView.as_view(), name='auth_logout_all'),
+]
 urlpatterns += router.urls
