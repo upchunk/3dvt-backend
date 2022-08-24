@@ -109,10 +109,12 @@ class MappingDataViewSet(viewsets.ModelViewSet):
 
 class ResultDataViewSet(viewsets.ModelViewSet):
     serializer_class = ResultDataSerializer
+    pagination_class = StandardSetPagination
     parser_classes = (MultiPartParser, FormParser)
     queryset = ResultData.objects.all()
 
 
 class TaskHistoryViewSet(viewsets.ModelViewSet):
     serializer_class = TaskHistorySerializer
+    pagination_class = StandardSetPagination
     queryset = TaskHistory.objects.all()
