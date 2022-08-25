@@ -28,17 +28,11 @@ class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
-    referral_code = serializers.CharField(
-        write_only=True, required=True)  # For Dev Phase Only
 
     class Meta:
         model = Users
         fields = ('username', 'password', 'password2',
-                  'email', 'first_name', 'last_name', 'referral_code')
-        extra_kwargs = {
-            'first_name': {'required': True},
-            'last_name': {'required': True}
-        }
+                  'email', 'first_name', 'last_name', "institusi")
 
     def validate(self, attrs: dict):
         if attrs['password'] != attrs['password2']:
@@ -58,17 +52,12 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
 
-        members = None
-        if validated_data["referral_code"] == "beadataadmin":
-            # Assign User to Group ("member" as Default)
-            members = Group.objects.get(name='LnData')
-        else:
-            members = Group.objects.get(name='member')
+        group, _ = Group.objects.get_or_create(
+            name=validated_data["institusi"])
+        group.user_set.add(user)
+        group.save()
 
-        members.user_set.add(user)
-        members.save()
-
-        user.groups.add(members)
+        user.groups.add(group)
 
         # Save Auto Generated APIKey to Model
         token, _ = Token.objects.get_or_create(user=user)

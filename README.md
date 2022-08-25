@@ -36,10 +36,13 @@ py manage.py migrate
 py manage.py runserver
 ```
 
-### Accessint the Backend
+### Accessing the Backend
 
 #### Open: [localhost:8000/api](http://localhost:8000/api) to access the DB via Django Rest Framework
 
 ### Documentation
 
 #### Open: [localhost:8000/docs](http://localhost:8000/docs) to access the Swagger UI Documentation
+
+For Easier Development, I Already Set Session Authentication that will only Active at Develop Branch
+Insert the Admin Account on [localhost:8000/admin](http://localhost:8000/admin) to access All the DRF Features on [localhost:8000/api](http://localhost:8000/api) or [localhost:8000/docs](http://localhost:8000/docs)

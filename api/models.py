@@ -20,6 +20,7 @@ def ResultDataset(instance, filename):  # explicitly set upload path and filenam
 
 class Users(AbstractUser):
     avatar = models.ImageField(upload_to=upload_to, null=True, blank=True)
+    institusi = models.CharField(max_length=50, null=True, blank=True)
     apikey = models.CharField(max_length=50, null=True, blank=True)
 
 
