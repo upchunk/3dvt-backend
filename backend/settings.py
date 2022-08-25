@@ -14,13 +14,20 @@ from pathlib import Path
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent
+TEMPLATE_DIR = Path(BASE_DIR, "templates")
 
 # Actual directory user files go to
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'mediafiles')
 
 # URL used to access the media
 MEDIA_URL = '/media/'
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/1.9/howto/static-files/
+STATIC_ROOT = os.path.join(BASE_DIR, 'api_static')
+STATIC_URL = '/api_static/'
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -31,7 +38,7 @@ SECRET_KEY = 'django-insecure-6+*os)*e3)2pq(zq7w#qarjp=ef^9xhbfstq12+#+mmazck8q$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # CORS_ALLOWED_ORIGINS = ["*"]
 # CORS_ALLOWED_ORIGIN_REGEXES = ["*"]
@@ -54,9 +61,16 @@ INSTALLED_APPS = [
     'django_filters',
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
+    'EXCEPTION_HANDLER': 'rest_framework.views.exception_handler',
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.openapi.AutoSchema',
+}
+
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",
-    "django.middleware.common.CommonMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -71,7 +85,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [TEMPLATE_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

@@ -1,0 +1,1405 @@
+openapi: 3.0.2
+info:
+  title: ''
+  version: ''
+paths:
+  /api/users/:
+    get:
+      operationId: listUsers
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Users'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createUsers
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Users'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Users'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Users'
+          description: ''
+      tags:
+      - api
+  /api/users/{id}/:
+    get:
+      operationId: retrieveUsers
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Users'
+          description: ''
+      tags:
+      - api
+    put:
+      operationId: updateUsers
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user.
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Users'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Users'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Users'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: partialUpdateUsers
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user.
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Users'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Users'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Users'
+          description: ''
+      tags:
+      - api
+    delete:
+      operationId: destroyUsers
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - api
+  /api/group/:
+    get:
+      operationId: listGroups
+      description: ''
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=4
+                  previous:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=2
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Group'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createGroup
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Group'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Group'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Group'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+          description: ''
+      tags:
+      - api
+  /api/group/{id}/:
+    get:
+      operationId: retrieveGroup
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this group.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+          description: ''
+      tags:
+      - api
+    put:
+      operationId: updateGroup
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this group.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Group'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Group'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Group'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: partialUpdateGroup
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this group.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Group'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Group'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Group'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+          description: ''
+      tags:
+      - api
+    delete:
+      operationId: destroyGroup
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this group.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - api
+  /api/imagedata/:
+    get:
+      operationId: listImageDatas
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ImageData'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createImageData
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImageData'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ImageData'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ImageData'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageData'
+          description: ''
+      tags:
+      - api
+  /api/imagedata/{id}/:
+    get:
+      operationId: retrieveImageData
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this image data.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageData'
+          description: ''
+      tags:
+      - api
+    put:
+      operationId: updateImageData
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this image data.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImageData'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ImageData'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ImageData'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageData'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: partialUpdateImageData
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this image data.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImageData'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ImageData'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ImageData'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageData'
+          description: ''
+      tags:
+      - api
+    delete:
+      operationId: destroyImageData
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this image data.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - api
+  /api/mappingdata/:
+    get:
+      operationId: listMappingDatas
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MappingData'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createMappingData
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MappingData'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MappingData'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MappingData'
+          description: ''
+      tags:
+      - api
+  /api/mappingdata/{id}/:
+    get:
+      operationId: retrieveMappingData
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this mapping data.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MappingData'
+          description: ''
+      tags:
+      - api
+    put:
+      operationId: updateMappingData
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this mapping data.
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MappingData'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MappingData'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MappingData'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: partialUpdateMappingData
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this mapping data.
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MappingData'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MappingData'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MappingData'
+          description: ''
+      tags:
+      - api
+    delete:
+      operationId: destroyMappingData
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this mapping data.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - api
+  /api/resultdata/:
+    get:
+      operationId: listResultDatas
+      description: ''
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=4
+                  previous:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=2
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ResultData'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createResultData
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ResultData'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ResultData'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultData'
+          description: ''
+      tags:
+      - api
+  /api/resultdata/{id}/:
+    get:
+      operationId: retrieveResultData
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this result data.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultData'
+          description: ''
+      tags:
+      - api
+    put:
+      operationId: updateResultData
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this result data.
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ResultData'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ResultData'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultData'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: partialUpdateResultData
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this result data.
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ResultData'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ResultData'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultData'
+          description: ''
+      tags:
+      - api
+    delete:
+      operationId: destroyResultData
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this result data.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - api
+  /api/taskhistory/:
+    get:
+      operationId: listTaskHistorys
+      description: ''
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=4
+                  previous:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=2
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TaskHistory'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createTaskHistory
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskHistory'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TaskHistory'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TaskHistory'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskHistory'
+          description: ''
+      tags:
+      - api
+  /api/taskhistory/{id}/:
+    get:
+      operationId: retrieveTaskHistory
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this task history.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskHistory'
+          description: ''
+      tags:
+      - api
+    put:
+      operationId: updateTaskHistory
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this task history.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskHistory'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TaskHistory'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TaskHistory'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskHistory'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: partialUpdateTaskHistory
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this task history.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskHistory'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TaskHistory'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TaskHistory'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskHistory'
+          description: ''
+      tags:
+      - api
+    delete:
+      operationId: destroyTaskHistory
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this task history.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - api
+  /api/token/:
+    post:
+      operationId: createMyTokenObtainPair
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MyTokenObtainPair'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MyTokenObtainPair'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MyTokenObtainPair'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MyTokenObtainPair'
+          description: ''
+      tags:
+      - api
+  /api/token/refresh/:
+    post:
+      operationId: createTokenRefresh
+      description: 'Takes a refresh type JSON web token and returns an access type
+        JSON web
+
+        token if the refresh token is valid.'
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+      tags:
+      - api
+  /api/apikey/:
+    post:
+      operationId: createAuthToken
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthToken'
+          description: ''
+      tags:
+      - api
+  /api/register/:
+    post:
+      operationId: createUsers
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Register'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Register'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Register'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Register'
+          description: ''
+      tags:
+      - api
+  /api/logout/:
+    post:
+      operationId: createLogout
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+          application/x-www-form-urlencoded:
+            schema: {}
+          multipart/form-data:
+            schema: {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - api
+  /api/logout/all/:
+    post:
+      operationId: createLogoutAll
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+          application/x-www-form-urlencoded:
+            schema: {}
+          multipart/form-data:
+            schema: {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - api
+  /api/change_password/{id}/:
+    put:
+      operationId: updateUsers
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePassword'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangePassword'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ChangePassword'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangePassword'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: partialUpdateUsers
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePassword'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangePassword'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ChangePassword'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangePassword'
+          description: ''
+      tags:
+      - api
+  /api/update_profile/{id}/:
+    put:
+      operationId: updateUsers
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UpdateUser'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateUser'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: partialUpdateUsers
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UpdateUser'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateUser'
+          description: ''
+      tags:
+      - api
+components:
+  schemas:
+    Users:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        password:
+          type: string
+          maxLength: 128
+        last_login:
+          type: string
+          format: date-time
+          nullable: true
+        is_superuser:
+          type: boolean
+          description: Designates that this user has all permissions without explicitly
+            assigning them.
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+\z
+          maxLength: 150
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        is_staff:
+          type: boolean
+          description: Designates whether the user can log into this admin site.
+        is_active:
+          type: boolean
+          description: Designates whether this user should be treated as active. Unselect
+            this instead of deleting accounts.
+        date_joined:
+          type: string
+          format: date-time
+        avatar:
+          type: string
+          format: binary
+          nullable: true
+        apikey:
+          type: string
+          nullable: true
+          maxLength: 50
+        groups:
+          type: array
+          items:
+            type: integer
+          description: The groups this user belongs to. A user will get all permissions
+            granted to each of their groups.
+        user_permissions:
+          type: array
+          items:
+            type: integer
+          description: Specific permissions for this user.
+      required:
+      - password
+      - username
+    Group:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 150
+        permissions:
+          type: array
+          items:
+            type: integer
+      required:
+      - name
+    ImageData:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        images:
+          type: string
+          format: binary
+          nullable: true
+        user:
+          type: integer
+      required:
+      - user
+    MappingData:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        mapping:
+          type: string
+          format: binary
+          nullable: true
+        image:
+          type: integer
+      required:
+      - image
+    ResultData:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        result_Images:
+          type: string
+          format: binary
+          nullable: true
+        user:
+          type: integer
+        source:
+          type: integer
+      required:
+      - user
+      - source
+    TaskHistory:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        status:
+          type: string
+          nullable: true
+          maxLength: 50
+        model:
+          type: string
+          nullable: true
+          maxLength: 50
+        type:
+          type: string
+          nullable: true
+          maxLength: 50
+        createdate:
+          type: string
+          format: date-time
+          readOnly: true
+        userid:
+          type: integer
+        result:
+          type: integer
+      required:
+      - userid
+      - result
+    MyTokenObtainPair:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - username
+      - password
+    TokenRefresh:
+      type: object
+      properties:
+        refresh:
+          type: string
+        access:
+          type: string
+          readOnly: true
+      required:
+      - refresh
+    AuthToken:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        token:
+          type: string
+          readOnly: true
+      required:
+      - username
+      - password
+    Register:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+\z
+          maxLength: 150
+        password:
+          type: string
+          writeOnly: true
+        password2:
+          type: string
+          writeOnly: true
+        email:
+          type: string
+          format: email
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        referral_code:
+          type: string
+          writeOnly: true
+      required:
+      - username
+      - password
+      - password2
+      - email
+      - first_name
+      - last_name
+      - referral_code
+    ChangePassword:
+      type: object
+      properties:
+        old_password:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        password2:
+          type: string
+          writeOnly: true
+      required:
+      - old_password
+      - password
+      - password2
+    UpdateUser:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+\z
+          maxLength: 150
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        email:
+          type: string
+          format: email
+      required:
+      - username
+      - first_name
+      - last_name
+      - email
