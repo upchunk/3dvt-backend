@@ -22,17 +22,24 @@ class GroupSerializer(serializers.ModelSerializer):
 class RegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
         required=True,
-        validators=[UniqueValidator(queryset=Users.objects.all())]
+        validators=[UniqueValidator(queryset=Users.objects.all())],
+        help_text="Insert your Email Address",
     )
 
     password = serializers.CharField(
-        write_only=True, required=True, validators=[validate_password])
-    password2 = serializers.CharField(write_only=True, required=True)
+        write_only=True, required=True, validators=[validate_password], help_text="Insert password for this user account")
+    password2 = serializers.CharField(
+        write_only=True, required=True, help_text="Confirm password for this user account")
 
     class Meta:
         model = Users
         fields = ('username', 'password', 'password2',
-                  'email', 'first_name', 'last_name', "institusi")
+                  'email', "institution")
+
+        extra_kwargs = {
+            'username': {"help_text": "Insert username for this account"},
+            'institution': {"allow_blank": True, "help_text": 'Insert institution name for this account'},
+        }
 
     def validate(self, attrs: dict):
         if attrs['password'] != attrs['password2']:
@@ -45,19 +52,16 @@ class RegisterSerializer(serializers.ModelSerializer):
         user = Users.objects.create(
             username=validated_data['username'],
             email=validated_data['email'],
-            first_name=validated_data['first_name'],
-            last_name=validated_data['last_name']
+            institution=validated_data['institution'],
         )
 
         user.set_password(validated_data['password'])
         user.save()
 
         group, _ = Group.objects.get_or_create(
-            name=validated_data["institusi"])
+            name=validated_data["institution"])
         group.user_set.add(user)
         group.save()
-
-        user.groups.add(group)
 
         # Save Auto Generated APIKey to Model
         token, _ = Token.objects.get_or_create(user=user)
@@ -69,9 +73,11 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 class ChangePasswordSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
-        write_only=True, required=True, validators=[validate_password])
-    password2 = serializers.CharField(write_only=True, required=True)
-    old_password = serializers.CharField(write_only=True, required=True)
+        write_only=True, required=True, validators=[validate_password], help_text="Insert new password")
+    password2 = serializers.CharField(
+        write_only=True, required=True, help_text="Confirm new password")
+    old_password = serializers.CharField(
+        write_only=True, required=True, help_text="Insert old password")
 
     class Meta:
         model = Users
@@ -103,14 +109,18 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
 
 
 class UpdateUserSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(required=True)
+    email = serializers.EmailField(
+        required=True, help_text="Email address of the user")
 
     class Meta:
         model = Users
-        fields = ('username', 'first_name', 'last_name', 'email')
+        fields = ('username', 'first_name',
+                  'last_name', 'email', 'institution')
         extra_kwargs = {
-            'first_name': {'required': True},
-            'last_name': {'required': True},
+            'username': {"help_text": "Username for this account"},
+            'first_name': {"required": True, "help_text": "User's first name"},
+            'last_name': {"allow_blank": True, "help_text": "User's last name"},
+            'institution': {"allow_blank": True, "help_text": "User's institution name"}
         }
 
     def validate_email(self, value):
@@ -138,27 +148,21 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         return instance
 
 
-class ImageDataSerializer(serializers.ModelSerializer):
+class SegmentationDataSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ImageData
+        model = SegmentationData
         fields = "__all__"
 
 
-class MappingDataSerializer(serializers.ModelSerializer):
+class SegmentationResultSerializer(serializers.ModelSerializer):
     class Meta:
-        model = MappingData
+        model = SegmentationResult
         fields = "__all__"
 
 
-class ResultDataSerializer(serializers.ModelSerializer):
+class SegmentationTaskSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ResultData
-        fields = "__all__"
-
-
-class TaskHistorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TaskHistory
+        model = SegmentationTask
         fields = '__all__'
 
 

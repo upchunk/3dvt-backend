@@ -8,12 +8,14 @@ from rest_framework_simplejwt.views import (
 
 router = DefaultRouter()
 
-router.register(r'users', UserViewSet, basename='Users')
-router.register(r'group', GroupViewSet, basename='Groups')
-router.register(r'imagedata', ImageDataViewSet, basename='Image Data')
-router.register(r'mappingdata', MappingDataViewSet, basename='Mapping Data')
-router.register(r'resultdata', ResultDataViewSet, basename='Result')
-router.register(r'taskhistory', TaskHistoryViewSet, basename='Task History')
+router.register(r'users', UserViewSet, basename='users')
+router.register(r'group', GroupViewSet, basename='groups')
+router.register(r'segmentation/data', SegmentationDataViewSet,
+                basename='segmentation_data')
+router.register(r'segmentation/result', SegmentationResultViewSet,
+                basename='segmentation_result')
+router.register(r'tasks/segmentation', SegmentationTaskViewSet,
+                basename='segmentation_tasks')
 
 urlpatterns = [
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),

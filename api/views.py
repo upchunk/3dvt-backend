@@ -10,8 +10,9 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken, OutstandingToken, BlacklistedToken
 from rest_framework.authtoken.models import Token
-# from .permissions import IsOwner
 
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
+from drf_spectacular.types import OpenApiTypes
 
 # Import Django Components
 from .pagination import *
@@ -51,6 +52,7 @@ class UpdateProfileView(generics.UpdateAPIView):
 
 class LogoutView(APIView):
 
+    @extend_schema(exclude=True)
     def post(self, request):
         try:
             refresh_token = request.data["refresh_token"]
@@ -64,6 +66,7 @@ class LogoutView(APIView):
 
 class LogoutAllView(APIView):
 
+    @extend_schema(exclude=True)
     def post(self, request):
         tokens = OutstandingToken.objects.filter(user_id=request.user.id)
         for token in tokens:
@@ -80,6 +83,10 @@ class MyTokenObtainPairView(TokenObtainPairView):
 class CustomAuthToken(ObtainAuthToken):
     permission_classes = [AllowAny]
 
+    @extend_schema(
+        # extra parameters added to the schema
+        description="Get your API Key to Authenticate and access all of the feature",
+    )
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data,
                                            context={'request': request})
@@ -96,25 +103,19 @@ class CustomAuthToken(ObtainAuthToken):
                         })
 
 
-class ImageDataViewSet(viewsets.ModelViewSet):
-    serializer_class = ImageDataSerializer
-    queryset = ImageData.objects.all()
+class SegmentationDataViewSet(viewsets.ModelViewSet):
+    serializer_class = SegmentationDataSerializer
+    queryset = SegmentationData.objects.all()
 
 
-class MappingDataViewSet(viewsets.ModelViewSet):
-    serializer_class = MappingDataSerializer
-    parser_classes = (MultiPartParser, FormParser)
-    queryset = MappingData.objects.all()
-
-
-class ResultDataViewSet(viewsets.ModelViewSet):
-    serializer_class = ResultDataSerializer
+class SegmentationResultViewSet(viewsets.ModelViewSet):
+    serializer_class = SegmentationResultSerializer
     pagination_class = StandardSetPagination
     parser_classes = (MultiPartParser, FormParser)
-    queryset = ResultData.objects.all()
+    queryset = SegmentationResult.objects.all()
 
 
-class TaskHistoryViewSet(viewsets.ModelViewSet):
-    serializer_class = TaskHistorySerializer
+class SegmentationTaskViewSet(viewsets.ModelViewSet):
+    serializer_class = SegmentationTaskSerializer
     pagination_class = StandardSetPagination
-    queryset = TaskHistory.objects.all()
+    queryset = SegmentationTask.objects.all()
