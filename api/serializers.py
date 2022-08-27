@@ -148,15 +148,18 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         return instance
 
 
-class SegmentationDataSerializer(serializers.ModelSerializer):
+class ImageDataSerializer(serializers.ModelSerializer):
     class Meta:
-        model = SegmentationData
+        model = ImageData
         fields = "__all__"
 
+    def create(self, validated_data):
+        return super().create(validated_data)
 
-class SegmentationResultSerializer(serializers.ModelSerializer):
+
+class ResultDataSerializer(serializers.ModelSerializer):
     class Meta:
-        model = SegmentationResult
+        model = ResultData
         fields = "__all__"
 
 
