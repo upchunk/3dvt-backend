@@ -24,7 +24,7 @@ pip install -r requirements.txt
 ```
 
 \*Note on Requirements:
-This project use Machine Learning that require Highly Specific Version on Python Module (ex: TensorFlow Windows vs Unix/MacOS). if there is any problem on installing the dependencies, please remove the package version number from the troublesome module on the requirements.txt file.
+This project use Machine Learning that require Highly Specific version off Python Module (ex: TensorFlow Windows amd64 vs TensorFlow Unix/MacOS i386). if there is any problem on installing the dependencies, please remove the package version number from the troublesome module on the requirements.txt file.
 
 ## Starting Main Django Server
 
