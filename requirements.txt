@@ -6,7 +6,7 @@ attrs==22.1.0
 autopep8==1.6.0
 cachetools==5.2.0
 certifi==2022.6.15
-charset-normalizer==2.1.0
+charset-normalizer==2.1.1
 cycler==0.11.0
 Django==4.1
 django-cors-headers==3.13.0
@@ -18,7 +18,7 @@ drf-spectacular-sidecar==2022.8.1
 flatbuffers==1.12
 fonttools==4.34.4
 gast==0.4.0
-google-auth==2.10.0
+google-auth==2.11.0
 google-auth-oauthlib==0.4.6
 google-pasta==0.2.0
 grpcio==1.47.0
@@ -36,7 +36,7 @@ Markdown==3.4.1
 MarkupSafe==2.1.1
 matplotlib==3.5.2
 networkx==2.8.5
-numpy==1.23.1
+numpy==1.23.2
 oauthlib==3.2.0
 opencv-python==4.6.0.66
 opt-einsum==3.3.0
@@ -78,6 +78,6 @@ typing==3.7.4.3
 typing_extensions==4.3.0
 tzdata==2022.2
 uritemplate==4.1.1
-urllib3==1.26.11
+urllib3==1.26.12
 Werkzeug==2.2.2
 wrapt==1.14.1

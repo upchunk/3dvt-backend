@@ -14,6 +14,8 @@ from rest_framework.authtoken.models import Token
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
 from drf_spectacular.types import OpenApiTypes
 
+from .scripts.load_pretrainmodel import predict
+
 # Import Django Components
 from .pagination import *
 from .models import Users
@@ -103,19 +105,29 @@ class CustomAuthToken(ObtainAuthToken):
                         })
 
 
-class SegmentationDataViewSet(viewsets.ModelViewSet):
-    serializer_class = SegmentationDataSerializer
-    queryset = SegmentationData.objects.all()
+class ImageDataViewSet(viewsets.ModelViewSet):
+    serializer_class = ImageDataSerializer
+    pagination_class = StandardSetPagination
+    queryset = ImageData.objects.all()
 
 
-class SegmentationResultViewSet(viewsets.ModelViewSet):
-    serializer_class = SegmentationResultSerializer
+class ResultDataViewSet(viewsets.ModelViewSet):
+    serializer_class = ResultDataSerializer
     pagination_class = StandardSetPagination
     parser_classes = (MultiPartParser, FormParser)
-    queryset = SegmentationResult.objects.all()
+    queryset = ResultData.objects.all()
 
 
 class SegmentationTaskViewSet(viewsets.ModelViewSet):
     serializer_class = SegmentationTaskSerializer
     pagination_class = StandardSetPagination
     queryset = SegmentationTask.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        images = request.data["images"]
+        request.data.result = predict(images)
+        if request.data.result:
+            request.data.status = "success"
+        else:
+            request.data.status = "success"
+        return super().create(request, *args, **kwargs)

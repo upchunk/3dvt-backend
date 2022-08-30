@@ -23,6 +23,9 @@ source env/bin/activate
 pip install -r requirements.txt
 ```
 
+\*Note on Requirements:
+This project use Machine Learning that require Highly Specific version off Python Module (ex: TensorFlow Windows amd64 vs TensorFlow Unix/MacOS i386). if there is any problem on installing the dependencies, please remove the package version number from the troublesome module on the requirements.txt file.
+
 ## Starting Main Django Server
 
 ```bash
@@ -43,6 +46,3 @@ py manage.py runserver
 ### Documentation
 
 #### Open: [localhost:8000/docs](http://localhost:8000/docs) to access the Swagger UI Documentation
-
-For Easier Development, I Already Set Session Authentication that will only Active at Develop Branch
-Insert the Admin Account on [localhost:8000/admin](http://localhost:8000/admin) to access All the DRF Features on [localhost:8000/api](http://localhost:8000/api) or [localhost:8000/docs](http://localhost:8000/docs)
