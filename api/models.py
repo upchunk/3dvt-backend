@@ -26,6 +26,8 @@ def ResultDataset(instance, filename):  # explicitly set upload path and filenam
 
 
 class Users(AbstractUser):
+    full_name = models.CharField(
+        max_length=50, blank=True, null=True,  help_text="Full Name of the User")
     avatar = models.ImageField(
         upload_to=upload_to, null=True, blank=True, help_text="Avatar of this user")
     institution = models.CharField(
@@ -53,6 +55,22 @@ class ResultData(models.Model):
 
 
 class SegmentationTask(models.Model):
+
+    userid = models.ForeignKey(
+        Users, on_delete=models.CASCADE, help_text="Corresponding user ID")
+    status = models.CharField(max_length=50, null=True,
+                              blank=True, help_text="Task Status")
+    images = models.FileField(
+        upload_to=ImageDataset, null=True, blank=True, help_text="Image File to be Processed")
+    model = models.CharField(max_length=50, null=True,
+                             blank=True, help_text="Selected Model")
+    createdate = models.DateTimeField(
+        auto_now_add=True, blank=True, help_text="Task Creation Date")
+    result = models.ForeignKey(
+        ResultData, on_delete=models.CASCADE, null=True, help_text="Corresponding Task Result")
+
+
+class ReconstructionTask(models.Model):
 
     userid = models.ForeignKey(
         Users, on_delete=models.CASCADE, help_text="Corresponding user ID")

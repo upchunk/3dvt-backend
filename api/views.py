@@ -123,11 +123,17 @@ class SegmentationTaskViewSet(viewsets.ModelViewSet):
     pagination_class = StandardSetPagination
     queryset = SegmentationTask.objects.all()
 
-    def create(self, request, *args, **kwargs):
-        images = request.data["images"]
-        request.data.result = predict(images)
-        if request.data.result:
-            request.data.status = "success"
-        else:
-            request.data.status = "success"
-        return super().create(request, *args, **kwargs)
+    # def create(self, request, *args, **kwargs):
+    #     images = request.data["images"]
+    #     request.data.result = predict(images)
+    #     if request.data.result:
+    #         request.data.status = "success"
+    #     else:
+    #         request.data.status = "success"
+    #     return super().create(request, *args, **kwargs)
+
+
+class ReconstructionTaskViewSet(viewsets.ModelViewSet):
+    serializer_class = ReconstructionTaskSerializer
+    pagination_class = StandardSetPagination
+    queryset = ReconstructionTask.objects.all()
