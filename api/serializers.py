@@ -28,16 +28,17 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     password = serializers.CharField(
         write_only=True, required=True, validators=[validate_password], help_text="Insert password for this user account")
-    # password2 = serializers.CharField(
-    #     write_only=True, required=True, help_text="Confirm password for this user account")
+    password2 = serializers.CharField(
+        write_only=True, required=True, help_text="Confirm password for this user account")
 
     class Meta:
         model = Users
-        fields = ('username', 'password', 'full_name',
+        fields = ('username', 'password', 'password2', 'full_name',
                   'email', "institution")
 
         extra_kwargs = {
             'username': {"help_text": "Insert username for this account"},
+            'full_name': {"help_text": "Insert full name for this account"},
             'institution': {"allow_blank": True, "help_text": 'Insert institution name for this account'},
         }
 
@@ -51,6 +52,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = Users.objects.create(
             username=validated_data['username'],
+            full_name=validated_data['full_name'],
             email=validated_data['email'],
             institution=validated_data['institution'],
         )
@@ -114,12 +116,10 @@ class UpdateUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Users
-        fields = ('username', 'first_name',
-                  'last_name', 'email', 'institution')
+        fields = ('username', 'full_name', 'email', 'institution')
         extra_kwargs = {
             'username': {"help_text": "Username for this account"},
-            'first_name': {"required": True, "help_text": "User's first name"},
-            'last_name': {"allow_blank": True, "help_text": "User's last name"},
+            'full_name': {"required": True, "help_text": "User's full name"},
             'institution': {"allow_blank": True, "help_text": "User's institution name"}
         }
 
@@ -138,8 +138,7 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         return value
 
     def update(self, instance, validated_data):
-        instance.first_name = validated_data['first_name']
-        instance.last_name = validated_data['last_name']
+        instance.full_name = validated_data['full_name']
         instance.email = validated_data['email']
         instance.username = validated_data['username']
 
