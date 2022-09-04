@@ -5,25 +5,20 @@ from django.utils.translation import gettext_lazy as _
 import arrow
 
 
-def uploaded():
-    now = arrow.now()
-    return now.format('YYYY-MM-DD-HH-mm-ss')
-
-
 def upload_to(instance, filename):  # explicitly set upload path and filename
-    return 'images/{user}/{time}/{name}'.format(user=instance.user.id, time=uploaded(), name=filename)
+    return 'images/{user}/{name}'.format(user=instance.user.id, name=filename)
 
 
 def ImageDataset(instance, filename):  # explicitly set upload path and filename
-    return 'imageData/{user}/{time}/{name}'.format(user=instance.user.id, time=uploaded(), name=filename)
+    return 'imageData/{user}/{name}'.format(user=instance.user.id, name=filename)
 
 
 def MappingDataset(instance, filename):  # explicitly set upload path and filename
-    return 'mappingData/{user}/{time}/{name}'.format(user=instance.user.id, time=uploaded(), name=filename)
+    return 'mappingData/{user}/{name}'.format(user=instance.user.id, name=filename)
 
 
 def ResultDataset(instance, filename):  # explicitly set upload path and filename
-    return 'resultData/{user}/{time}/{name}'.format(user=instance.user.id, time=uploaded(), name=filename)
+    return 'resultData/{user}/{name}'.format(user=instance.user.id, name=filename)
 
 
 class Users(AbstractUser):
@@ -51,6 +46,8 @@ class ImageList(models.Model):
         Users, on_delete=models.CASCADE, help_text="Corresponding user ID")
     imageList = models.CharField(
         _("imageList"), max_length=50, null=True, blank=True, help_text="Image Data Mapping")
+    time = models.CharField(_("time"), max_length=50, null=True,
+                            blank=True, help_text="Time of the image list was processed")
 
 
 class ResultData(models.Model):

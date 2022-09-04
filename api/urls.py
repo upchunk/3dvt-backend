@@ -12,7 +12,7 @@ router.register(r'users', UserViewSet, basename='users')
 router.register(r'group', GroupViewSet, basename='groups')
 router.register(r'images', ImageDataViewSet,
                 basename='image_data')
-router.register(r'multi_images', MultiImageViewSet,
+router.register(r'imageList', ImageListViewSet,
                 basename='image_data')
 router.register(r'result', ResultDataViewSet,
                 basename='result_data')
