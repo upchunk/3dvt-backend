@@ -156,6 +156,31 @@ class ImageDataSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
 
+class MultiImageSerializer(serializers.ModelSerializer):
+    images = ImageDataSerializer(many=True, required=False)
+
+    class Meta:
+        model = ImageData
+        fields = "__all__"
+
+    def create(self, validated_data):
+        try:
+            # try to get and save images (if any)
+            images_data = dict(
+                (self.context['request'].FILES).lists()).get('images', None)
+            listed = []
+            for image in images_data:
+                image = ImageData.objects.create(
+                    images=image, **validated_data)
+                listed.append(image)
+                mapped = ImageList.objects.create(
+                    imageList=listed, **validated_data)
+        except:
+            # if no images are available - create using default image
+            raise Exception("No images found for this request.")
+        return mapped
+
+
 class ResultDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = ResultData

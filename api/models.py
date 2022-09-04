@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils.translation import gettext_lazy as _
 
 import arrow
 
@@ -39,10 +40,17 @@ class Users(AbstractUser):
 class ImageData(models.Model):
     user = models.ForeignKey(
         Users, on_delete=models.CASCADE, help_text="Corresponding user ID")
-    images = models.FileField(
-        upload_to=ImageDataset, null=True, blank=True, help_text="Image File to be Processed")
+    images = models.FileField(_("images"),
+                              upload_to=ImageDataset, null=True, blank=True, help_text="Image File to be Processed")
     mapping = models.FileField(
         upload_to=MappingDataset, null=True, blank=True, help_text="Mapping file of corresponding image to be processed")
+
+
+class ImageList(models.Model):
+    user = models.ForeignKey(
+        Users, on_delete=models.CASCADE, help_text="Corresponding user ID")
+    imageList = models.CharField(
+        _("imageList"), max_length=50, null=True, blank=True, help_text="Image Data Mapping")
 
 
 class ResultData(models.Model):

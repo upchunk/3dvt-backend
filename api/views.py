@@ -111,6 +111,12 @@ class ImageDataViewSet(viewsets.ModelViewSet):
     queryset = ImageData.objects.all()
 
 
+class MultiImageViewSet(viewsets.ModelViewSet):
+    serializer_class = MultiImageSerializer
+    pagination_class = StandardSetPagination
+    queryset = ImageData.objects.all()
+
+
 class ResultDataViewSet(viewsets.ModelViewSet):
     serializer_class = ResultDataSerializer
     pagination_class = StandardSetPagination
