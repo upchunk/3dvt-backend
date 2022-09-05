@@ -30,7 +30,7 @@ if USE_SPACES == 'TRUE':
     AWS_S3_OBJECT_PARAMETERS = {
         'CacheControl': 'max-age=86400',
     }
-    
+
     # Static file
     STATIC_LOCATION = 'static'
     STATICFILES_DIRS = [
@@ -41,7 +41,7 @@ if USE_SPACES == 'TRUE':
     STATIC_ROOT = 'static/'
 
     # Media file
-    DEFAULT_FILE_STORAGE = 'storage_backends.MediaStorage'
+    DEFAULT_FILE_STORAGE = 'api.backend.storage_backends.MediaStorage'
     MEDIA_ROOT = 'media/'
 
 else:
@@ -103,7 +103,7 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'drf_spectacular_sidecar',  # required for Django collectstatic discovery
 
-    'storages', # required for Digital Ocean Space integration
+    'storages',  # required for Digital Ocean Space integration
 ]
 
 REST_FRAMEWORK = {
