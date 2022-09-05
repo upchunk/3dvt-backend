@@ -1,28 +1,24 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
-import arrow
-
-
-def uploaded():
-    now = arrow.now()
-    return now.format('YYYY-MM-DD-HH-mm-ss')
-
 
 def upload_to(instance, filename):  # explicitly set upload path and filename
-    return 'images/{user}/{time}/{name}'.format(user=instance.user.id, time=uploaded(), name=filename)
+    return 'images/{user}/{name}'.format(user=instance.user.id, name=filename)
 
 
 def ImageDataset(instance, filename):  # explicitly set upload path and filename
-    return 'imageData/{user}/{time}/{name}'.format(user=instance.user.id, time=uploaded(), name=filename)
+    return 'imageData/{user}/{name}'.format(
+        user=instance.user.id, name=filename)
 
 
 def MappingDataset(instance, filename):  # explicitly set upload path and filename
-    return 'mappingData/{user}/{time}/{name}'.format(user=instance.user.id, time=uploaded(), name=filename)
+    return 'mappingData/{user}/{name}'.format(
+        user=instance.user.id, name=filename)
 
 
 def ResultDataset(instance, filename):  # explicitly set upload path and filename
-    return 'resultData/{user}/{time}/{name}'.format(user=instance.user.id, time=uploaded(), name=filename)
+    return 'resultData/{user}/{name}'.format(
+        user=instance.user.id, name=filename)
 
 
 class Users(AbstractUser):
