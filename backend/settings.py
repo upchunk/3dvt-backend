@@ -146,6 +146,8 @@ CACHES = {
 FILE_UPLOAD_HANDLERS = ["django.core.files.uploadhandler.MemoryFileUploadHandler",
                         "django.core.files.uploadhandler.TemporaryFileUploadHandler"]
 
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240  # higher than the count of fields
+
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 

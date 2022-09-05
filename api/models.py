@@ -61,7 +61,7 @@ class ResultData(models.Model):
 
 class SegmentationTask(models.Model):
 
-    userid = models.ForeignKey(
+    user = models.ForeignKey(
         Users, on_delete=models.CASCADE, help_text="Corresponding user ID")
     status = models.CharField(max_length=50, null=True,
                               blank=True, help_text="Task Status")
