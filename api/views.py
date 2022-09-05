@@ -14,7 +14,7 @@ from rest_framework.authtoken.models import Token
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
 from drf_spectacular.types import OpenApiTypes
 
-from .scripts.load_pretrainmodel import predict
+# from .scripts.load_pretrainmodel import predict
 
 # Import Django Components
 from .pagination import *
