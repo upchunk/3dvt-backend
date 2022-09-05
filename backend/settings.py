@@ -41,7 +41,7 @@ if USE_SPACES == 'TRUE':
     STATIC_ROOT = 'static/'
 
     # Media file
-    DEFAULT_FILE_STORAGE = 'api.backend.storage_backends.MediaStorage'
+    DEFAULT_FILE_STORAGE = 'backend.storage_backends.MediaStorage'
     MEDIA_ROOT = 'media/'
 
 else:
