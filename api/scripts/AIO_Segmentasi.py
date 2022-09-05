@@ -6,6 +6,7 @@ Created on Tue Aug 30 19:04:30 2022
 """
 
 # Library
+import io
 from keras.models import Model
 from keras.layers import Input, Conv2D, MaxPooling2D, concatenate, Conv2DTranspose, Dropout
 from keras.utils import normalize
@@ -13,6 +14,7 @@ import os
 import cv2
 import numpy as np
 from matplotlib import pyplot as plt
+from django.core.files.images import ImageFile
 
 # Arsitektur Deep Learning - Simple U-Net Model
 
@@ -26,7 +28,7 @@ def simple_unet_model(IMG_HEIGHT, IMG_WIDTH, IMG_CHANNELS):
     # Contraction path
     c1 = Conv2D(16, (3, 3), activation='relu',
                 kernel_initializer='he_normal', padding='same')(s)
-    #c1 = BatchNormalization()(c1)
+    # c1 = BatchNormalization()(c1)
     c1 = Conv2D(16, (3, 3), activation='relu',
                 kernel_initializer='he_normal', padding='same')(c1)
     p1 = MaxPooling2D((2, 2))(c1)
@@ -112,49 +114,48 @@ def get_model():
 # Looping segmentation images on folder choosed
 
 
-def segmentation_loop():
-    path = "./Data_Phantom_08-06-2022_CB2/"  # Path image for segmentation
-    path_simpan_image = "./Data_Phantom_08-06-2022_CB2_Result_IMG/"
-    ori_path = os.listdir(path)
-    a = len(ori_path)
-    for i in range(0, a):
-        test_img_other = cv2.imread(path + str(ori_path[i]), 0)
-        test_img_other = test_img_other[50:400, 100:500]
-        width = 448
-        height = 448  # keep original height
-        dim = (width, height)
-
-        # RESIZE IMAGE (RESIZE DETEKSI BERDASARKAN TEPI STILL ON DEVELOP, INI MEMAKAI RESIZE DENGAN MENENTUKAN UKURAN)
-        test_img_other = cv2.resize(
-            test_img_other, dim, interpolation=cv2.INTER_AREA)
-        test_img_other_norm2 = np.expand_dims(
-            normalize(np.array(test_img_other), axis=1), 2)
-        test_img_other_norm3 = np.resize(test_img_other_norm2, (448, 448, 1))
-        test_img_other_norm = test_img_other_norm3[:, :, 0][:, :, None]
-        test_img_other_input = np.expand_dims(test_img_other_norm, 0)
-
-        # PREDIKSI SEGMENTASI
-        # Predict and threshold for values above 0.5 probability. Change the probability threshold to low value (e.g. 0.05) for watershed demo.
-        prediction_other = (model.predict(test_img_other_input)[
-                            0, :, :, 0] > 0.02).astype(np.uint8)
-        plt.imshow(test_img_other, cmap='gray', interpolation='none')
-        plt.imshow(prediction_other, cmap='jet',
-                   interpolation='none', alpha=0.7)
-        plt.axis('off')  # axis x,y dimatikan
-        # plt.show()
-
-        # MENCARI LINGKARAN BESAR DAN MEMBERSIHKAN LAINNYA
-        # ------- STILL ON DEVELOP -----
-
-        # SAVE IMAGE HASIL SEGMENTASI
-        base = os.path.splitext(ori_path[i])[0]
-        nama_file = os.path.join(path_simpan_image, str(base) + ".png")
-        plt.savefig(nama_file,  bbox_inches='tight', pad_inches=0)
-
-
 # ------------- MAIN FUNCTION ---------------------------------#
 # Load Pretrained Model
 model = get_model()
-model.load_weights('./model_tesis_epoch20_sz448.hdf5')
-# Segmentation
-segmentation_loop()
+model.load_weights("api\scripts\model_tesis_epoch20_sz448.hdf5")
+
+
+def segmentation(image):
+    try:
+        test_img_other = cv2.imread(image)
+    except:
+        test_img_other = cv2.imdecode(np.fromstring(
+            image.read(), np.uint8), cv2.IMREAD_UNCHANGED)
+    test_img_other = test_img_other[50:400, 100:500]
+    width = 448
+    height = 448  # keep original height
+    dim = (width, height)
+
+    # RESIZE IMAGE (RESIZE DETEKSI BERDASARKAN TEPI STILL ON DEVELOP, INI MEMAKAI RESIZE DENGAN MENENTUKAN UKURAN)
+    test_img_other = cv2.resize(
+        test_img_other, dim, interpolation=cv2.INTER_AREA)
+    test_img_other_norm2 = np.expand_dims(
+        normalize(np.array(test_img_other), axis=1), 2)
+    test_img_other_norm3 = np.resize(test_img_other_norm2, (448, 448, 1))
+    test_img_other_norm = test_img_other_norm3[:, :, 0][:, :, None]
+    test_img_other_input = np.expand_dims(test_img_other_norm, 0)
+
+    # PREDIKSI SEGMENTASI
+    # Predict and threshold for values above 0.5 probability. Change the probability threshold to low value (e.g. 0.05) for watershed demo.
+    prediction_other = (model.predict(test_img_other_input)[
+                        0, :, :, 0] > 0.02).astype(np.uint8)
+    plt.imshow(test_img_other, cmap='gray', interpolation='none')
+    plt.imshow(prediction_other, cmap='jet',
+               interpolation='none', alpha=0.7)
+    plt.axis('off')  # axis x,y dimatikan
+    # plt.show()
+
+    # MENCARI LINGKARAN BESAR DAN MEMBERSIHKAN LAINNYA
+    # ------- STILL ON DEVELOP -----
+
+    # SAVE IMAGE HASIL SEGMENTASI
+    figure = io.BytesIO()
+    plt.savefig(figure, bbox_inches='tight', pad_inches=0, format="png")
+
+    content_file = ImageFile(figure)
+    return content_file
