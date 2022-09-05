@@ -32,12 +32,18 @@ if USE_SPACES == 'TRUE':
     }
     
     # Static file
-    AWS_LOCATION = 'static'
+    STATIC_LOCATION = 'static'
     STATICFILES_DIRS = [
         os.path.join(BASE_DIR, 'api_static')
     ]
-    STATIC_URL = 'https://%s/%s/' % (AWS_S3_ENDPOINT_URL, AWS_LOCATION)
+    STATIC_URL = 'https://%s/%s/' % (AWS_S3_ENDPOINT_URL, STATIC_LOCATION)
     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    STATIC_ROOT = 'static/'
+
+    # Media file
+    DEFAULT_FILE_STORAGE = 'storage_backends.MediaStorage'
+    MEDIA_ROOT = 'media/'
+
 else:
     # Static files (CSS, JavaScript, Images)
     # https://docs.djangoproject.com/en/1.9/howto/static-files/
