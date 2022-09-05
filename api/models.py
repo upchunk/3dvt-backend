@@ -1,3 +1,5 @@
+from enum import unique
+import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
@@ -36,9 +38,9 @@ class ImageData(models.Model):
     user = models.ForeignKey(
         Users, on_delete=models.CASCADE, help_text="Corresponding user ID")
     images = models.FileField(_("images"),
-                              upload_to=ImageDataset, null=True, blank=True, help_text="Image File to be Processed")
-    mapping = models.FileField(
-        upload_to=MappingDataset, null=True, blank=True, help_text="Mapping file of corresponding image to be processed")
+                              upload_to=ImageDataset, help_text="Image File to be Processed")
+    imageKey = models.UUIDField(
+        _("imageKey"), default=uuid.uuid4)
 
 
 class ImageList(models.Model):
@@ -55,8 +57,8 @@ class ResultData(models.Model):
         Users, on_delete=models.CASCADE, help_text="Corresponding user ID")
     source = models.ForeignKey(
         ImageData, on_delete=models.CASCADE, help_text="Corresponding Image Data Source")
-    result_Images = models.FileField(
-        upload_to=ResultDataset, null=True, blank=True, help_text="Image Result")
+    result_Images = models.ImageField(
+        upload_to=ResultDataset, help_text="Image Result")
 
 
 class SegmentationTask(models.Model):
@@ -65,8 +67,6 @@ class SegmentationTask(models.Model):
         Users, on_delete=models.CASCADE, help_text="Corresponding user ID")
     status = models.CharField(max_length=50, null=True,
                               blank=True, help_text="Task Status")
-    images = models.FileField(
-        upload_to=ImageDataset, null=True, blank=True, help_text="Image File to be Processed")
     model = models.CharField(max_length=50, null=True,
                              blank=True, help_text="Selected Model")
     createdate = models.DateTimeField(
@@ -81,11 +81,9 @@ class ReconstructionTask(models.Model):
         Users, on_delete=models.CASCADE, help_text="Corresponding user ID")
     status = models.CharField(max_length=50, null=True,
                               blank=True, help_text="Task Status")
-    images = models.FileField(
-        upload_to=ImageDataset, null=True, blank=True, help_text="Image File to be Processed")
     model = models.CharField(max_length=50, null=True,
                              blank=True, help_text="Selected Model")
     createdate = models.DateTimeField(
         auto_now_add=True, blank=True, help_text="Task Creation Date")
     result = models.ForeignKey(
-        ResultData, on_delete=models.CASCADE, null=True, help_text="Corresponding Task Result")
+        ResultData, on_delete=models.CASCADE, null=True, blank=True, help_text="Corresponding Task Result")

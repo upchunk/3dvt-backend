@@ -10,7 +10,6 @@ import io
 from keras.models import Model
 from keras.layers import Input, Conv2D, MaxPooling2D, concatenate, Conv2DTranspose, Dropout
 from keras.utils import normalize
-import os
 import cv2
 import numpy as np
 from matplotlib import pyplot as plt
@@ -155,7 +154,10 @@ def segmentation(image):
 
     # SAVE IMAGE HASIL SEGMENTASI
     figure = io.BytesIO()
+    plt.savefig("result",  bbox_inches='tight', pad_inches=0, format="png")
     plt.savefig(figure, bbox_inches='tight', pad_inches=0, format="png")
+    plt.show()
 
     content_file = ImageFile(figure)
-    return content_file
+    print(content_file)
+    return plt.show()

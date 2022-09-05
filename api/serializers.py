@@ -157,9 +157,6 @@ class ImageDataSerializer(serializers.ModelSerializer):
         model = ImageData
         fields = "__all__"
 
-    def create(self, validated_data):
-        return super().create(validated_data)
-
 
 class ImageListSerializer(serializers.ModelSerializer):
     images = ImageDataSerializer(many=True, required=False)

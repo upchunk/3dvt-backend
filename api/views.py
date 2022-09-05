@@ -11,10 +11,9 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken, OutstandingToken, BlacklistedToken
 from rest_framework.authtoken.models import Token
 
-from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
-from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema
 
-# from .scripts.load_pretrainmodel import predict
+from .scripts.AIO_Segmentasi import segmentation
 
 # Import Django Components
 from .pagination import *
@@ -129,14 +128,27 @@ class SegmentationTaskViewSet(viewsets.ModelViewSet):
     pagination_class = StandardSetPagination
     queryset = SegmentationTask.objects.all()
 
-    # def create(self, request, *args, **kwargs):
-    #     images = request.data["images"]
-    #     request.data.result = predict(images)
-    #     if request.data.result:
-    #         request.data.status = "success"
-    #     else:
-    #         request.data.status = "success"
-    #     return super().create(request, *args, **kwargs)
+    def create(self, request, *args, **kwargs):
+        images = request.FILES.getlist('images')
+        for img in images:
+            userid = request.user.id
+            user = Users.objects.get(pk=userid)
+            result = segmentation(img)
+            source = ImageData.objects.create(images=img, user=user)
+            request.data.user = user
+            try:
+                results = ResultData.objects.create(
+                    result_Images=result, source=source, user=user)
+                status = "SUCCESS"
+            except:
+                status = "FAILED"
+
+        try:
+            SegmentationTask.objects.create(
+                user=user, status=status, result=results)
+            return Response({"STATUS_CODE": "200", "STATUS_MESSAGE": status})
+        except:
+            return Response({"STATUS_CODE": "401", "STATUS_MESSAGE": status})
 
 
 class ReconstructionTaskViewSet(viewsets.ModelViewSet):
