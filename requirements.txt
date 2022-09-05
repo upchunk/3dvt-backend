@@ -4,6 +4,7 @@ asgiref==3.5.2
 astunparse==1.6.3
 attrs==22.1.0
 autopep8==1.6.0
+boto3==1.24.63
 cachetools==5.2.0
 certifi==2022.6.15
 charset-normalizer==2.1.1
@@ -11,6 +12,7 @@ cycler==0.11.0
 Django==4.1
 django-cors-headers==3.13.0
 django-filter==22.1
+django-storages==1.13.1
 djangorestframework==3.13.1
 djangorestframework-simplejwt==5.2.0
 drf-spectacular==0.23.1
