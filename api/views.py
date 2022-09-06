@@ -11,10 +11,9 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken, OutstandingToken, BlacklistedToken
 from rest_framework.authtoken.models import Token
 
-from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
-from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema
 
-from .scripts.load_pretrainmodel import predict
+from .scripts.AIO_Segmentasi import segmentation
 
 # Import Django Components
 from .pagination import *
@@ -111,6 +110,12 @@ class ImageDataViewSet(viewsets.ModelViewSet):
     queryset = ImageData.objects.all()
 
 
+class ImageListViewSet(viewsets.ModelViewSet):
+    serializer_class = ImageListSerializer
+    pagination_class = StandardSetPagination
+    queryset = ImageList.objects.all()
+
+
 class ResultDataViewSet(viewsets.ModelViewSet):
     serializer_class = ResultDataSerializer
     pagination_class = StandardSetPagination
@@ -124,10 +129,25 @@ class SegmentationTaskViewSet(viewsets.ModelViewSet):
     queryset = SegmentationTask.objects.all()
 
     def create(self, request, *args, **kwargs):
-        images = request.data["images"]
-        request.data.result = predict(images)
-        if request.data.result:
-            request.data.status = "success"
+        images = request.FILES.getlist('images')
+        for img in images:
+            userid = request.user.id
+            user = Users.objects.get(pk=userid)
+            result = segmentation(img, user)
+            if result:
+                status = "SUCCESS"
+            else:
+                status = "FAILED"
+
+        if status == "SUCCESS":
+            SegmentationTask.objects.create(
+                user=user, status=status, result=result)
+            return Response({"STATUS_CODE": "200", "STATUS_MESSAGE": status})
         else:
-            request.data.status = "success"
-        return super().create(request, *args, **kwargs)
+            return Response({"STATUS_CODE": "401", "STATUS_MESSAGE": status})
+
+
+class ReconstructionTaskViewSet(viewsets.ModelViewSet):
+    serializer_class = ReconstructionTaskSerializer
+    pagination_class = StandardSetPagination
+    queryset = ReconstructionTask.objects.all()

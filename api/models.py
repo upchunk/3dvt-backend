@@ -1,5 +1,8 @@
+from enum import unique
+import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils.translation import gettext_lazy as _
 
 
 def upload_to(instance, filename):  # explicitly set upload path and filename
@@ -7,21 +10,20 @@ def upload_to(instance, filename):  # explicitly set upload path and filename
 
 
 def ImageDataset(instance, filename):  # explicitly set upload path and filename
-    return 'imageData/{user}/{name}'.format(
-        user=instance.user.id, name=filename)
+    return 'imageData/{user}/{name}'.format(user=instance.user.id, name=filename)
 
 
 def MappingDataset(instance, filename):  # explicitly set upload path and filename
-    return 'mappingData/{user}/{name}'.format(
-        user=instance.user.id, name=filename)
+    return 'mappingData/{user}/{name}'.format(user=instance.user.id, name=filename)
 
 
 def ResultDataset(instance, filename):  # explicitly set upload path and filename
-    return 'resultData/{user}/{name}'.format(
-        user=instance.user.id, name=filename)
+    return 'resultData/{user}/{name}'.format(user=instance.user.id, name=filename)
 
 
 class Users(AbstractUser):
+    full_name = models.CharField(
+        max_length=50, blank=True, null=True,  help_text="Full Name of the User")
     avatar = models.ImageField(
         upload_to=upload_to, null=True, blank=True, help_text="Avatar of this user")
     institution = models.CharField(
@@ -33,32 +35,49 @@ class Users(AbstractUser):
 class ImageData(models.Model):
     user = models.ForeignKey(
         Users, on_delete=models.CASCADE, help_text="Corresponding user ID")
-    images = models.FileField(
-        upload_to=ImageDataset, null=True, blank=True, help_text="Image File to be Processed")
-    mapping = models.FileField(
-        upload_to=MappingDataset, null=True, blank=True, help_text="Mapping file of corresponding image to be processed")
+    images = models.FileField(_("images"),
+                              upload_to=ImageDataset, help_text="Image File to be Processed")
+
+
+class ImageList(models.Model):
+    user = models.ForeignKey(
+        Users, on_delete=models.CASCADE, help_text="Corresponding user ID")
+    imageList = models.CharField(
+        _("imageList"), max_length=50, null=True, blank=True, help_text="Image Data Mapping")
+    time = models.CharField(_("time"), max_length=50, null=True,
+                            blank=True, help_text="Time of the image list was processed")
 
 
 class ResultData(models.Model):
     user = models.ForeignKey(
         Users, on_delete=models.CASCADE, help_text="Corresponding user ID")
-    source = models.ForeignKey(
-        ImageData, on_delete=models.CASCADE, help_text="Corresponding Image Data Source")
-    result_Images = models.FileField(
-        upload_to=ResultDataset, null=True, blank=True, help_text="Image Result")
+    result_Images = models.ImageField(
+        upload_to=ResultDataset, help_text="Image Result")
 
 
 class SegmentationTask(models.Model):
 
-    userid = models.ForeignKey(
+    user = models.ForeignKey(
         Users, on_delete=models.CASCADE, help_text="Corresponding user ID")
     status = models.CharField(max_length=50, null=True,
                               blank=True, help_text="Task Status")
-    images = models.FileField(
-        upload_to=ImageDataset, null=True, blank=True, help_text="Image File to be Processed")
     model = models.CharField(max_length=50, null=True,
                              blank=True, help_text="Selected Model")
     createdate = models.DateTimeField(
         auto_now_add=True, blank=True, help_text="Task Creation Date")
     result = models.ForeignKey(
         ResultData, on_delete=models.CASCADE, null=True, help_text="Corresponding Task Result")
+
+
+class ReconstructionTask(models.Model):
+
+    userid = models.ForeignKey(
+        Users, on_delete=models.CASCADE, help_text="Corresponding user ID")
+    status = models.CharField(max_length=50, null=True,
+                              blank=True, help_text="Task Status")
+    model = models.CharField(max_length=50, null=True,
+                             blank=True, help_text="Selected Model")
+    createdate = models.DateTimeField(
+        auto_now_add=True, blank=True, help_text="Task Creation Date")
+    result = models.ForeignKey(
+        ResultData, on_delete=models.CASCADE, null=True, blank=True, help_text="Corresponding Task Result")

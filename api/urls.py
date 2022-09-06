@@ -12,10 +12,14 @@ router.register(r'users', UserViewSet, basename='users')
 router.register(r'group', GroupViewSet, basename='groups')
 router.register(r'images', ImageDataViewSet,
                 basename='image_data')
+router.register(r'imageList', ImageListViewSet,
+                basename='image_data')
 router.register(r'result', ResultDataViewSet,
                 basename='result_data')
-router.register(r'tasks/segmentation', SegmentationTaskViewSet,
+router.register(r'segmentation', SegmentationTaskViewSet,
                 basename='segmentation_tasks')
+router.register(r'reconstruction', ReconstructionTaskViewSet,
+                basename='reconstruction_tasks')
 
 urlpatterns = [
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
