@@ -15,6 +15,8 @@ import numpy as np
 from matplotlib import pyplot as plt
 from django.core.files.images import ImageFile
 
+from api.models import ResultData
+
 # Arsitektur Deep Learning - Simple U-Net Model
 
 
@@ -119,7 +121,8 @@ model = get_model()
 model.load_weights("api\scripts\model_tesis_epoch20_sz448.hdf5")
 
 
-def segmentation(image):
+def segmentation(image, user):
+    print(str(image))
     try:
         test_img_other = cv2.imread(image)
     except:
@@ -143,6 +146,7 @@ def segmentation(image):
     # Predict and threshold for values above 0.5 probability. Change the probability threshold to low value (e.g. 0.05) for watershed demo.
     prediction_other = (model.predict(test_img_other_input)[
                         0, :, :, 0] > 0.02).astype(np.uint8)
+    plt.switch_backend('AGG')
     plt.imshow(test_img_other, cmap='gray', interpolation='none')
     plt.imshow(prediction_other, cmap='jet',
                interpolation='none', alpha=0.7)
@@ -153,11 +157,16 @@ def segmentation(image):
     # ------- STILL ON DEVELOP -----
 
     # SAVE IMAGE HASIL SEGMENTASI
-    figure = io.BytesIO()
-    plt.savefig("result",  bbox_inches='tight', pad_inches=0, format="png")
-    plt.savefig(figure, bbox_inches='tight', pad_inches=0, format="png")
-    plt.show()
-
-    content_file = ImageFile(figure)
-    print(content_file)
-    return plt.show()
+    buffer = io.BytesIO()
+    plt.savefig(buffer, bbox_inches='tight', pad_inches=0, format="png")
+    content_file = ImageFile(buffer, str(image))
+    print('buffer',  content_file)
+    try:
+        results = ResultData.objects.create(user=user)
+        results.result_Images = content_file
+        results.save()
+        buffer.close()
+        return results
+    except:
+        buffer.close()
+        raise Exception("Could not save image database")

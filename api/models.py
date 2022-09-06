@@ -39,8 +39,6 @@ class ImageData(models.Model):
         Users, on_delete=models.CASCADE, help_text="Corresponding user ID")
     images = models.FileField(_("images"),
                               upload_to=ImageDataset, help_text="Image File to be Processed")
-    imageKey = models.UUIDField(
-        _("imageKey"), default=uuid.uuid4)
 
 
 class ImageList(models.Model):
@@ -55,8 +53,6 @@ class ImageList(models.Model):
 class ResultData(models.Model):
     user = models.ForeignKey(
         Users, on_delete=models.CASCADE, help_text="Corresponding user ID")
-    source = models.ForeignKey(
-        ImageData, on_delete=models.CASCADE, help_text="Corresponding Image Data Source")
     result_Images = models.ImageField(
         upload_to=ResultDataset, help_text="Image Result")
 

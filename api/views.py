@@ -133,21 +133,17 @@ class SegmentationTaskViewSet(viewsets.ModelViewSet):
         for img in images:
             userid = request.user.id
             user = Users.objects.get(pk=userid)
-            result = segmentation(img)
-            source = ImageData.objects.create(images=img, user=user)
-            request.data.user = user
-            try:
-                results = ResultData.objects.create(
-                    result_Images=result, source=source, user=user)
+            result = segmentation(img, user)
+            if result:
                 status = "SUCCESS"
-            except:
+            else:
                 status = "FAILED"
 
-        try:
+        if status == "SUCCESS":
             SegmentationTask.objects.create(
-                user=user, status=status, result=results)
+                user=user, status=status, result=result)
             return Response({"STATUS_CODE": "200", "STATUS_MESSAGE": status})
-        except:
+        else:
             return Response({"STATUS_CODE": "401", "STATUS_MESSAGE": status})
 
 
