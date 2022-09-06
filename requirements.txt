@@ -4,8 +4,6 @@ asgiref==3.5.2
 astunparse==1.6.3
 attrs==22.1.0
 autopep8==1.6.0
-boto3==1.24.66
-botocore==1.27.66
 cachetools==5.2.0
 certifi==2022.6.15
 charset-normalizer==2.1.1
