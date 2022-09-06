@@ -14,24 +14,47 @@ from datetime import timedelta
 from pathlib import Path
 import os
 
+# Environment Variables
+USE_SPACES = 'TRUE'
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-TEMPLATE_DIR = Path(BASE_DIR, "/api/templates")
+TEMPLATE_DIR = os.path.join(BASE_DIR, "/api/templates")
 
-# Actual directory user files go to
-MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'mediafiles')
+# Digital Ocean SPACE Configuration
+if USE_SPACES == 'TRUE':
+    AWS_ACCESS_KEY_ID = 'DO00UU7PG2P7BFLZ6QEB'
+    AWS_SECRET_ACCESS_KEY = 'm8qKOCD+3J3uXR5//MwYKt0J+r2yHj2nl1NyatJImNQ'
+    AWS_STORAGE_BUCKET_NAME = '3dvt-space'
+    AWS_S3_ENDPOINT_URL = 'https://sgp1.digitaloceanspaces.com'
+    AWS_S3_OBJECT_PARAMETERS = {
+        'CacheControl': 'max-age=86400',
+    }
 
-# URL used to access the media
-MEDIA_URL = '/media/'
+    # Static file
+    STATIC_LOCATION = 'static'
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, 'api_static')
+    ]
+    STATIC_URL = 'https://%s/%s/' % (AWS_S3_ENDPOINT_URL, STATIC_LOCATION)
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    STATIC_ROOT = 'static/'
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.9/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, 'api_static')
-STATIC_URL = '/api_static/'
+    # Media file
+    DEFAULT_FILE_STORAGE = 'backend.storage_backends.MediaStorage'
+    MEDIA_ROOT = 'media/'
 
+else:
+    # Static files (CSS, JavaScript, Images)
+    # https://docs.djangoproject.com/en/1.9/howto/static-files/
+    STATIC_ROOT = os.path.join(BASE_DIR, 'api_static')
+    STATIC_URL = '/api_static/'
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
+    # Actual directory user files go to
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
+    # URL used to access the media
+    MEDIA_URL = '/media/'
+
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-6+*os)*e3)2pq(zq7w#qarjp=ef^9xhbfstq12+#+mmazck8q$'
@@ -39,17 +62,19 @@ SECRET_KEY = 'django-insecure-6+*os)*e3)2pq(zq7w#qarjp=ef^9xhbfstq12+#+mmazck8q$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
-# CORS_ALLOWED_ORIGINS = ["*"]
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:8000'
+]
 # CORS_ALLOWED_ORIGIN_REGEXES = ["*"]
 CORS_ALLOW_ALL_ORIGINS = True
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:8000/'
+    'http://localhost:8000'
 ]
-# ALLOWED_HOSTS = [
-#     'localhost',
-# ]
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+]
+
 # CORS_ORIGIN_WHITELIST = [
 #     'http://localhost:8000',
 #     'http://localhost:3000'
@@ -77,6 +102,8 @@ INSTALLED_APPS = [
 
     'drf_spectacular',
     'drf_spectacular_sidecar',  # required for Django collectstatic discovery
+
+    'storages',  # required for Digital Ocean Space integration
 ]
 
 REST_FRAMEWORK = {
@@ -169,14 +196,15 @@ AUTH_PASSWORD_VALIDATORS = [
 SPECTACULAR_SETTINGS = {
     'TITLE': '3dvt Backend Docs',
     'VERSION': '0.3.0',
-    'SWAGGER_UI_DIST': 'SIDECAR',  # shorthand to use the sidecar instead
-    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
+    # Using CDN for Swagger redoc because using self-hosting doesn't work on DO Space
+    'SWAGGER_UI_DIST': 'https://cdn.jsdelivr.net/npm/swagger-ui-dist@latest',
+    'SWAGGER_UI_FAVICON_HREF': 'https://cdn.jsdelivr.net/npm/swagger-ui-dist@latest/favicon-32x32.png',
+    'REDOC_DIST': 'https://cdn.jsdelivr.net/npm/redoc@latest',
     "SWAGGER_UI_SETTINGS": {
         "deepLinking": True,
         "persistAuthorization": True,
         "displayOperationId": True,
     },
-    'REDOC_DIST': 'SIDECAR',
     'COMPONENT_SPLIT_REQUEST': True
     # OTHER SETTINGS
 }
@@ -229,12 +257,6 @@ USE_I18N = True
 USE_TZ = True
 
 AUTH_USER_MODEL = 'api.Users'
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
-
-STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
