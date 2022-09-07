@@ -158,7 +158,7 @@ def segmentation(image, user):
 
     # SAVE IMAGE HASIL SEGMENTASI
     buffer = io.BytesIO()
-    plt.savefig(buffer, bbox_inches='tight', pad_inches=0, format="png")
+    plt.savefig(buffer, bbox_inches='tight', pad_inches=0)
     content_file = ImageFile(buffer, str(image))
     print('buffer',  content_file)
     try:
