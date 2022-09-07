@@ -33,16 +33,18 @@ if USE_SPACES == 'TRUE':
 
     # Static file
     STATIC_LOCATION = 'static'
-    STATICFILES_DIRS = [
-        os.path.join(BASE_DIR, 'api_static')
-    ]
-    STATIC_URL = 'https://%s/%s/' % (AWS_S3_ENDPOINT_URL, STATIC_LOCATION)
-    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    # STATICFILES_DIRS = [
+    #     os.path.join(BASE_DIR, 'static')
+    # ]
+
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
     STATIC_ROOT = 'static/'
+    STATIC_URL = 'https://%s/%s/' % (AWS_S3_ENDPOINT_URL, STATIC_LOCATION)
 
     # Media file
-    DEFAULT_FILE_STORAGE = 'backend.storage_backends.MediaStorage'
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     MEDIA_ROOT = 'media/'
+    MEDIA_URL = '/media/'
 
 else:
     # Static files (CSS, JavaScript, Images)
@@ -73,6 +75,7 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 ALLOWED_HOSTS = [
     '127.0.0.1',
+    'localhost',
 ]
 
 # CORS_ORIGIN_WHITELIST = [

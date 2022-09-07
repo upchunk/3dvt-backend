@@ -99,7 +99,7 @@ def simple_unet_model(IMG_HEIGHT, IMG_WIDTH, IMG_CHANNELS):
     model = Model(inputs=[inputs], outputs=[outputs])
     model.compile(optimizer='adam', loss='binary_crossentropy',
                   metrics=['accuracy'])
-    model.summary()
+    # model.summary()
 
     return model
 
