@@ -7,7 +7,6 @@ Created on Tue Aug 30 19:04:30 2022
 
 # Library
 import io
-from unittest import result
 from keras.models import Model
 from keras.layers import Input, Conv2D, MaxPooling2D, concatenate, Conv2DTranspose, Dropout
 from keras.utils import normalize
@@ -122,8 +121,8 @@ model = get_model()
 model.load_weights("api\scripts\model_tesis_epoch20_sz448.hdf5")
 
 
-def segmentation(user, image, task):
-    source = ImageData.objects.create(user=user, task=task, images=image)
+def segmentation(user, image, task=None):
+    print(str(image))
     try:
         test_img_other = cv2.imread(image)
     except:
@@ -160,13 +159,15 @@ def segmentation(user, image, task):
     # SAVE IMAGE HASIL SEGMENTASI
     buffer = io.BytesIO()
     plt.savefig(buffer, bbox_inches='tight', pad_inches=0)
-    result = ImageFile(buffer, str(image))
-    print('buffer',  result)
+    content_file = ImageFile(buffer, str(image))
+    print('buffer',  content_file)
     try:
-        source.result = result
-        source.save()
+        results = ImageData.objects.create(
+            user=user, task=task, images=image)
+        results.result = content_file
+        results.save()
         buffer.close()
-        return source
+        return results
     except:
         buffer.close()
         raise Exception("Could not save image database")

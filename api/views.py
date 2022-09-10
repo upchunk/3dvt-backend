@@ -116,11 +116,11 @@ class SegmentationTaskViewSet(viewsets.ModelViewSet):
     queryset = TaskHistory.objects.all()
 
     def create(self, request, *args, **kwargs):
+        userid = request.user.id
+        user = Users.objects.get(pk=userid)
         task = TaskHistory.objects.create(
             user=user, status="RECIEVED", type='segmentation')
         images = request.FILES.getlist('images')
-        userid = request.user.id
-        user = Users.objects.get(pk=userid)
         for img in images:
             result = segmentation(user, img, task)
             if result:
