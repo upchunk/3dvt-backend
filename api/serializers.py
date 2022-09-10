@@ -162,8 +162,6 @@ class ImageDataSerializer(serializers.ModelSerializer):
 
 
 class TaskHistorySerializer(serializers.ModelSerializer):
-    images = ImageDataSerializer(many=True, required=False)
-
     class Meta:
         model = TaskHistory
         fields = '__all__'
