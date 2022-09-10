@@ -7,6 +7,7 @@ Created on Tue Aug 30 19:04:30 2022
 
 # Library
 import io
+from unittest import result
 from keras.models import Model
 from keras.layers import Input, Conv2D, MaxPooling2D, concatenate, Conv2DTranspose, Dropout
 from keras.utils import normalize
@@ -15,7 +16,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from django.core.files.images import ImageFile
 
-from api.models import ResultData
+from api.models import ImageData
 
 # Arsitektur Deep Learning - Simple U-Net Model
 
@@ -121,8 +122,8 @@ model = get_model()
 model.load_weights("api\scripts\model_tesis_epoch20_sz448.hdf5")
 
 
-def segmentation(image, user):
-    print(str(image))
+def segmentation(user, image, task):
+    source = ImageData.objects.create(user=user, task=task, images=image)
     try:
         test_img_other = cv2.imread(image)
     except:
@@ -159,14 +160,13 @@ def segmentation(image, user):
     # SAVE IMAGE HASIL SEGMENTASI
     buffer = io.BytesIO()
     plt.savefig(buffer, bbox_inches='tight', pad_inches=0)
-    content_file = ImageFile(buffer, str(image))
-    print('buffer',  content_file)
+    result = ImageFile(buffer, str(image))
+    print('buffer',  result)
     try:
-        results = ResultData.objects.create(user=user)
-        results.result_Images = content_file
-        results.save()
+        source.result = result
+        source.save()
         buffer.close()
-        return results
+        return source
     except:
         buffer.close()
         raise Exception("Could not save image database")

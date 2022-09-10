@@ -5,6 +5,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth.password_validation import validate_password
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import Group
+import arrow
 
 import arrow
 
@@ -160,44 +161,11 @@ class ImageDataSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class ImageListSerializer(serializers.ModelSerializer):
+class TaskHistorySerializer(serializers.ModelSerializer):
     images = ImageDataSerializer(many=True, required=False)
 
     class Meta:
-        model = ImageList
-        fields = "__all__"
-
-    def create(self, validated_data):
-        try:
-            # try to get and save images (if any)
-            images_data = dict(
-                (self.context['request'].FILES).lists()).get('images', None)
-            for image in images_data:
-                image = ImageData.objects.create(
-                    images=image, **validated_data)
-            mapped = ImageList.objects.create(
-                imageList=images_data, time=uploaded(), **validated_data)
-        except:
-            # if no images are available - create using default image
-            raise Exception("No images found for this request.")
-        return mapped
-
-
-class ResultDataSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ResultData
-        fields = "__all__"
-
-
-class SegmentationTaskSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SegmentationTask
-        fields = '__all__'
-
-
-class ReconstructionTaskSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ReconstructionTask
+        model = TaskHistory
         fields = '__all__'
 
 
