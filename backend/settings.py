@@ -104,7 +104,6 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
 
     'drf_spectacular',
-    'drf_spectacular_sidecar',  # required for Django collectstatic discovery
 
     'storages',  # required for Digital Ocean Space integration
 ]

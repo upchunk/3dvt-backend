@@ -15,7 +15,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from django.core.files.images import ImageFile
 
-from api.models import ResultData
+from api.models import ImageData
 
 # Arsitektur Deep Learning - Simple U-Net Model
 
@@ -121,7 +121,7 @@ model = get_model()
 model.load_weights("api\scripts\model_tesis_epoch20_sz448.hdf5")
 
 
-def segmentation(image, user):
+def segmentation(user, image, task=None):
     print(str(image))
     try:
         test_img_other = cv2.imread(image)
@@ -162,8 +162,9 @@ def segmentation(image, user):
     content_file = ImageFile(buffer, str(image))
     print('buffer',  content_file)
     try:
-        results = ResultData.objects.create(user=user)
-        results.result_Images = content_file
+        results = ImageData.objects.create(
+            user=user, task=task, images=image)
+        results.result = content_file
         results.save()
         buffer.close()
         return results

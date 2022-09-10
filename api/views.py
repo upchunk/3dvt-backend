@@ -110,44 +110,33 @@ class ImageDataViewSet(viewsets.ModelViewSet):
     queryset = ImageData.objects.all()
 
 
-class ImageListViewSet(viewsets.ModelViewSet):
-    serializer_class = ImageListSerializer
-    pagination_class = StandardSetPagination
-    queryset = ImageList.objects.all()
-
-
-class ResultDataViewSet(viewsets.ModelViewSet):
-    serializer_class = ResultDataSerializer
-    pagination_class = StandardSetPagination
-    parser_classes = (MultiPartParser, FormParser)
-    queryset = ResultData.objects.all()
-
-
 class SegmentationTaskViewSet(viewsets.ModelViewSet):
-    serializer_class = SegmentationTaskSerializer
+    serializer_class = TaskHistorySerializer
     pagination_class = StandardSetPagination
-    queryset = SegmentationTask.objects.all()
+    queryset = TaskHistory.objects.all()
 
     def create(self, request, *args, **kwargs):
+        userid = request.user.id
+        user = Users.objects.get(pk=userid)
+        task = TaskHistory.objects.create(
+            user=user, status="RECIEVED", type='segmentation')
         images = request.FILES.getlist('images')
         for img in images:
-            userid = request.user.id
-            user = Users.objects.get(pk=userid)
-            result = segmentation(img, user)
+            result = segmentation(user, img, task)
             if result:
                 status = "SUCCESS"
             else:
                 status = "FAILED"
 
         if status == "SUCCESS":
-            SegmentationTask.objects.create(
-                user=user, status=status, result=result)
+            task.status = status
+            task.save()
             return Response({"STATUS_CODE": "200", "STATUS_MESSAGE": status})
         else:
             return Response({"STATUS_CODE": "401", "STATUS_MESSAGE": status})
 
 
 class ReconstructionTaskViewSet(viewsets.ModelViewSet):
-    serializer_class = ReconstructionTaskSerializer
+    serializer_class = TaskHistorySerializer
     pagination_class = StandardSetPagination
-    queryset = ReconstructionTask.objects.all()
+    queryset = TaskHistory.objects.all()
