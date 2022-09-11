@@ -128,6 +128,7 @@ def segmentation(image, user):
     except:
         test_img_other = cv2.imdecode(np.fromstring(
             image.read(), np.uint8), cv2.IMREAD_UNCHANGED)
+    test_img_other = cv2.cvtColor(test_img_other, cv2.COLOR_BGR2GRAY)
     test_img_other = test_img_other[50:400, 100:500]
     width = 448
     height = 448  # keep original height
