@@ -137,7 +137,7 @@ class SegmentationTaskViewSet(viewsets.ModelViewSet):
             task.save()
             return Response({"STATUS_CODE": "200", "STATUS_MESSAGE": status})
         else:
-            return Response({"STATUS_CODE": "401", "STATUS_MESSAGE": status})
+            return Response({"STATUS_CODE": "500", "STATUS_MESSAGE": "Internal Server Error"})
 
 
 class ReconstructionTaskViewSet(viewsets.ModelViewSet):
