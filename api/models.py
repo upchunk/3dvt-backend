@@ -1,3 +1,4 @@
+from email.policy import default
 from enum import unique
 import uuid
 from django.db import models
@@ -44,6 +45,10 @@ class TaskHistory(models.Model):
                             help_text="Type of the task, ex: 'segmentation'")
     createdate = models.DateTimeField(
         auto_now_add=True, help_text="Task Creation Date")
+    sources = models.JSONField(
+        _("Source"), default=list, null=True, blank=True, help_text="Source Image's Url(s)")
+    results = models.JSONField(
+        _("Result"), default=list, null=True, blank=True, help_text="Result Image's Url(s)")
 
 
 class ImageData(models.Model):

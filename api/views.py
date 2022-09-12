@@ -138,15 +138,14 @@ class SegmentationTaskViewSet(viewsets.ModelViewSet):
                     status = "FAILED"
 
             if status == "SUCCESS":
-                print(source_list)
-                print(result_list)
+                task.sources = source_list
+                task.results = result_list
                 task.status = status
                 task.save()
                 serializer = self.get_serializer(instance=task)
                 return Response({"status": "SUCCESS",
                                  "message": "Image(s) segmentation completed successfully",
-                                 "task_data": serializer.data,
-                                 "result_url": result_list})
+                                 "task_data": serializer.data})
             else:
                 return Response({"status": "FAILED", "message": "Internal Server Error"})
         except:
