@@ -122,7 +122,6 @@ model.load_weights("api\scripts\model_tesis_epoch20_sz448.hdf5")
 
 
 def segmentation(user, image, task=None):
-    print(str(image))
     try:
         test_img_other = cv2.imread(image)
     except:

@@ -1,4 +1,5 @@
 # import DRF Components
+import json
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.permissions import AllowAny
 from rest_framework import status, generics, viewsets
@@ -12,7 +13,7 @@ from rest_framework_simplejwt.tokens import RefreshToken, OutstandingToken, Blac
 from rest_framework.authtoken.models import Token
 
 from drf_spectacular.utils import extend_schema
-
+from django.http import FileResponse
 from .scripts.AIO_Segmentasi import segmentation
 
 # Import Django Components
@@ -122,22 +123,34 @@ class SegmentationTaskViewSet(viewsets.ModelViewSet):
         task = TaskHistory.objects.create(
             user=user, status="RECIEVED", type='segmentation')
         images = request.FILES.getlist('images')
+        source_list = []
+        result_list = []
         try:
             for img in images:
                 result = segmentation(user, img, task)
                 if result:
                     status = "SUCCESS"
+                    source_list.append(
+                        {"name": str(img), "url": result.images.url})
+                    result_list.append(
+                        {"name": str(img), "url": result.result.url})
                 else:
                     status = "FAILED"
-        except:
-            raise Exception("No Images Recieved")
 
-        if status == "SUCCESS":
-            task.status = status
-            task.save()
-            return Response({"STATUS_CODE": "200", "STATUS_MESSAGE": status})
-        else:
-            return Response({"STATUS_CODE": "500", "STATUS_MESSAGE": "Internal Server Error"})
+            if status == "SUCCESS":
+                print(source_list)
+                print(result_list)
+                task.status = status
+                task.save()
+                serializer = self.get_serializer(instance=task)
+                return Response({"status": "SUCCESS",
+                                 "message": "Image(s) segmentation completed successfully",
+                                 "task_data": serializer.data,
+                                 "result_url": result_list})
+            else:
+                return Response({"status": "FAILED", "message": "Internal Server Error"})
+        except:
+            raise Exception("An error occurred")
 
 
 class ReconstructionTaskViewSet(viewsets.ModelViewSet):
