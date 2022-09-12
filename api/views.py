@@ -113,6 +113,7 @@ class ImageDataViewSet(viewsets.ModelViewSet):
 class SegmentationTaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskHistorySerializer
     pagination_class = StandardSetPagination
+    parser_classes = [MultiPartParser, FormParser]
     queryset = TaskHistory.objects.all()
 
     def create(self, request, *args, **kwargs):
@@ -121,12 +122,15 @@ class SegmentationTaskViewSet(viewsets.ModelViewSet):
         task = TaskHistory.objects.create(
             user=user, status="RECIEVED", type='segmentation')
         images = request.FILES.getlist('images')
-        for img in images:
-            result = segmentation(user, img, task)
-            if result:
-                status = "SUCCESS"
-            else:
-                status = "FAILED"
+        try:
+            for img in images:
+                result = segmentation(user, img, task)
+                if result:
+                    status = "SUCCESS"
+                else:
+                    status = "FAILED"
+        except:
+            raise Exception("No Images Recieved")
 
         if status == "SUCCESS":
             task.status = status
