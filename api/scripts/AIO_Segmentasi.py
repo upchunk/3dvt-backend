@@ -147,7 +147,12 @@ def segmentation(user, image, task=None):
     prediction_other = (model.predict(test_img_other_input)[
                         0, :, :, 0] > 0.02).astype(np.uint8)
     plt.switch_backend('AGG')
+    buffer2 = io.BytesIO()
     plt.imshow(test_img_other, cmap='gray', interpolation='none')
+    plt.axis('off')  # axis x,y dimatikan sementara
+    plt.savefig(buffer2, bbox_inches='tight', pad_inches=0)
+    sources = ImageFile(buffer2, str(image))
+    plt.axis('on')  # axis x,y dinyalakan kembali
     plt.imshow(prediction_other, cmap='jet',
                interpolation='none', alpha=0.7)
     plt.axis('off')  # axis x,y dimatikan
@@ -157,17 +162,19 @@ def segmentation(user, image, task=None):
     # ------- STILL ON DEVELOP -----
 
     # SAVE IMAGE HASIL SEGMENTASI
-    buffer = io.BytesIO()
-    plt.savefig(buffer, bbox_inches='tight', pad_inches=0)
-    content_file = ImageFile(buffer, str(image))
-    print('buffer',  content_file)
+    buffer1 = io.BytesIO()
+    plt.savefig(buffer1, bbox_inches='tight', pad_inches=0)
+    content_file = ImageFile(buffer1, str(image))
+    print('buffer1',  content_file)
     try:
         results = ImageData.objects.create(
-            user=user, task=task, images=image)
+            user=user, task=task, images=sources)
         results.result = content_file
         results.save()
-        buffer.close()
+        buffer1.close()
+        buffer2.close()
         return results
     except:
-        buffer.close()
+        buffer1.close()
+        buffer2.close()
         raise Exception("Could not save image database")

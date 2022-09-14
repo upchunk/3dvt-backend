@@ -133,13 +133,13 @@ class SegmentationTaskViewSet(viewsets.ModelViewSet):
                     source_list.append(
                         {"name": str(img),
                          "original": result.images.url,
-                         "originalHeight": 400,
-                         "originalWidth": 400, })
+                         "originalHeight": 448,
+                         "originalWidth": 448, })
                     result_list.append(
                         {"name": str(img),
                          "original": result.result.url,
-                         "originalHeight": 400,
-                         "originalWidth": 400, })
+                         "originalHeight": 448,
+                         "originalWidth": 448, })
                 else:
                     status = "FAILED"
 
