@@ -123,11 +123,11 @@ model.load_weights("api\scripts\model_tesis_epoch20_sz448.hdf5")
 
 def segmentation(user, image, task=None):
     try:
-        test_img_other = cv2.imread(image)
+        test_img_other = cv2.imread(image, cv2.IMREAD_GRAYSCALE)
     except:
         test_img_other = cv2.imdecode(np.fromstring(
-            image.read(), np.uint8), cv2.IMREAD_UNCHANGED)
-    test_img_other = cv2.cvtColor(test_img_other, cv2.COLOR_BGR2GRAY)
+            image.read(), np.uint8), cv2.IMREAD_GRAYSCALE)
+    # test_img_other = cv2.cvtColor(test_img_other, cv2.COLOR_BGR2GRAY)
     test_img_other = test_img_other[50:400, 100:500]
     width = 448
     height = 448  # keep original height

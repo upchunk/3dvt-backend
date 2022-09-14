@@ -32,7 +32,7 @@ def custom_exception_handler(exc, context):
         }
         response.data = custom_response_data
     # not restframework's exception
-    elif isinstance(exc, Exception) and getattr(exc, 'status_code', None) is None:
-        response = Response(
-            {"message": "Internal Server Error", "trace": str(exc)}, status=500)
+    # elif isinstance(exc, Exception) and getattr(exc, 'status_code', None) is None:
+    #     response = Response(
+    #         {"message": "Internal Server Error", "trace": str(exc)}, status=500)
     return response

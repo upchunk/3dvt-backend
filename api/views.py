@@ -1,5 +1,4 @@
 # import DRF Components
-import json
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.permissions import AllowAny
 from rest_framework import status, generics, viewsets
@@ -13,7 +12,6 @@ from rest_framework_simplejwt.tokens import RefreshToken, OutstandingToken, Blac
 from rest_framework.authtoken.models import Token
 
 from drf_spectacular.utils import extend_schema
-from django.http import FileResponse
 from .scripts.AIO_Segmentasi import segmentation
 
 # Import Django Components
@@ -25,6 +23,7 @@ from .serializers import *
 class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UsersSerializer
     parser_classes = (MultiPartParser, FormParser)
+    filterset_fields = ('groups', )
     queryset = Users.objects.all()
 
 
@@ -123,6 +122,7 @@ class SegmentationTaskViewSet(viewsets.ModelViewSet):
         task = TaskHistory.objects.create(
             user=user, status="RECIEVED", type='segmentation')
         images = request.FILES.getlist('images')
+        print(images)
         source_list = []
         result_list = []
         try:
@@ -131,9 +131,15 @@ class SegmentationTaskViewSet(viewsets.ModelViewSet):
                 if result:
                     status = "SUCCESS"
                     source_list.append(
-                        {"name": str(img), "url": result.images.url})
+                        {"name": str(img),
+                         "original": result.images.url,
+                         "originalHeight": 400,
+                         "originalWidth": 400, })
                     result_list.append(
-                        {"name": str(img), "url": result.result.url})
+                        {"name": str(img),
+                         "original": result.result.url,
+                         "originalHeight": 400,
+                         "originalWidth": 400, })
                 else:
                     status = "FAILED"
 
