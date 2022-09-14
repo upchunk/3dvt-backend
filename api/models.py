@@ -37,6 +37,8 @@ class TaskHistory(models.Model):
 
     user = models.ForeignKey(
         Users, on_delete=models.CASCADE, help_text="Corresponding user ID")
+    groupname = models.CharField(
+        max_length=50, null=True, blank=True, help_text="User Group Name for this current Task")
     status = models.CharField(max_length=50, null=True,
                               blank=True, help_text="Task Status, ex: 'STARTED', 'FINISHED")
     model = models.CharField(max_length=50, null=True,

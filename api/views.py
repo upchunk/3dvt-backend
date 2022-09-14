@@ -115,10 +115,12 @@ class SegmentationTaskViewSet(viewsets.ModelViewSet):
     pagination_class = StandardSetPagination
     parser_classes = [MultiPartParser, FormParser]
     queryset = TaskHistory.objects.all()
+    filterset_fields = ('groupname', 'status')
 
     def create(self, request, *args, **kwargs):
         userid = request.user.id
         user = Users.objects.get(pk=userid)
+        group = Group.objects.get(user=user)
         task = TaskHistory.objects.create(
             user=user, status="RECIEVED", type='segmentation')
         images = request.FILES.getlist('images')
@@ -147,6 +149,7 @@ class SegmentationTaskViewSet(viewsets.ModelViewSet):
                 task.sources = source_list
                 task.results = result_list
                 task.status = status
+                task.groupname = group.name
                 task.save()
                 serializer = self.get_serializer(instance=task)
                 return Response({"status": "SUCCESS",
@@ -162,3 +165,4 @@ class ReconstructionTaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskHistorySerializer
     pagination_class = StandardSetPagination
     queryset = TaskHistory.objects.all()
+    filterset_fields = ('groupname', 'status')

@@ -148,15 +148,13 @@ def segmentation(user, image, task=None):
                         0, :, :, 0] > 0.02).astype(np.uint8)
     plt.switch_backend('AGG')
     buffer2 = io.BytesIO()
-    plt.imshow(test_img_other, cmap='gray', interpolation='none')
     plt.axis('off')  # axis x,y dimatikan sementara
+    plt.imshow(test_img_other, cmap='gray', interpolation='none')
     plt.savefig(buffer2, bbox_inches='tight', pad_inches=0)
     sources = ImageFile(buffer2, str(image))
-    plt.axis('on')  # axis x,y dinyalakan kembali
+
     plt.imshow(prediction_other, cmap='jet',
                interpolation='none', alpha=0.7)
-    plt.axis('off')  # axis x,y dimatikan
-    # plt.show()
 
     # MENCARI LINGKARAN BESAR DAN MEMBERSIHKAN LAINNYA
     # ------- STILL ON DEVELOP -----
