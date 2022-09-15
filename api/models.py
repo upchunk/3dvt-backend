@@ -1,6 +1,3 @@
-from email.policy import default
-from enum import unique
-import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
@@ -56,6 +53,8 @@ class TaskHistory(models.Model):
 class ImageData(models.Model):
     user = models.ForeignKey(
         Users, on_delete=models.CASCADE, help_text="Corresponding user ID")
+    groupname = models.CharField(
+        max_length=50, null=True, blank=True, help_text="User Group Name for this current Task")
     task = models.ForeignKey(TaskHistory, on_delete=models.CASCADE,
                              null=True, blank=True, help_text="Corresponding Task")
     images = models.FileField(_("images"),

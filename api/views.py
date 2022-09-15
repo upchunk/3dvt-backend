@@ -15,9 +15,14 @@ from drf_spectacular.utils import extend_schema
 from .scripts.AIO_Segmentasi import segmentation
 
 # Import Django Components
-from .pagination import *
-from .models import Users
-from .serializers import *
+
+from api.pagination import SmallSetPagination, StandardSetPagination
+from api.serializers import (ChangePasswordSerializer, GroupSerializer, ImageDataSerializer,
+                             MyTokenObtainPairSerializer, RegisterSerializer, TaskHistorySerializer, UpdateUserSerializer, UsersSerializer)
+from api.models import ImageData, TaskHistory, Users
+from django.contrib.auth.models import Group
+
+inDevelopment = True
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -25,12 +30,16 @@ class UserViewSet(viewsets.ModelViewSet):
     parser_classes = (MultiPartParser, FormParser)
     filterset_fields = ('groups', )
     queryset = Users.objects.all()
+    if inDevelopment:
+        permission_classes = [AllowAny]
 
 
 class GroupViewSet(viewsets.ModelViewSet):
     serializer_class = GroupSerializer
     pagination_class = SmallSetPagination
     queryset = Group.objects.all()
+    if inDevelopment:
+        permission_classes = [AllowAny]
 
 
 class RegisterView(generics.CreateAPIView):
@@ -43,15 +52,21 @@ class ChangePasswordView(generics.UpdateAPIView):
     queryset = Users.objects.all()
     # permission_classes = [IsOwner]
     serializer_class = ChangePasswordSerializer
+    if inDevelopment:
+        permission_classes = [AllowAny]
 
 
 class UpdateProfileView(generics.UpdateAPIView):
     queryset = Users.objects.all()
     # permission_classes = [IsOwner]
     serializer_class = UpdateUserSerializer
+    if inDevelopment:
+        permission_classes = [AllowAny]
 
 
 class LogoutView(APIView):
+    if inDevelopment:
+        permission_classes = [AllowAny]
 
     @extend_schema(exclude=True)
     def post(self, request):
@@ -66,6 +81,8 @@ class LogoutView(APIView):
 
 
 class LogoutAllView(APIView):
+    if inDevelopment:
+        permission_classes = [AllowAny]
 
     @extend_schema(exclude=True)
     def post(self, request):
@@ -108,6 +125,9 @@ class ImageDataViewSet(viewsets.ModelViewSet):
     serializer_class = ImageDataSerializer
     pagination_class = StandardSetPagination
     queryset = ImageData.objects.all()
+    filterset_fields = ('user', 'groupname')
+    if inDevelopment:
+        permission_classes = [AllowAny]
 
 
 class SegmentationTaskViewSet(viewsets.ModelViewSet):
@@ -115,7 +135,9 @@ class SegmentationTaskViewSet(viewsets.ModelViewSet):
     pagination_class = StandardSetPagination
     parser_classes = [MultiPartParser, FormParser]
     queryset = TaskHistory.objects.all()
-    filterset_fields = ('groupname', 'status')
+    filterset_fields = ('user', 'groupname', 'status')
+    if inDevelopment:
+        permission_classes = [AllowAny]
 
     def create(self, request, *args, **kwargs):
         userid = request.user.id
@@ -166,3 +188,5 @@ class ReconstructionTaskViewSet(viewsets.ModelViewSet):
     pagination_class = StandardSetPagination
     queryset = TaskHistory.objects.all()
     filterset_fields = ('groupname', 'status')
+    if inDevelopment:
+        permission_classes = [AllowAny]
