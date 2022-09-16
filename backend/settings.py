@@ -26,22 +26,24 @@ if USE_SPACES == 'TRUE':
     AWS_ACCESS_KEY_ID = 'DO00UU7PG2P7BFLZ6QEB'
     AWS_SECRET_ACCESS_KEY = 'm8qKOCD+3J3uXR5//MwYKt0J+r2yHj2nl1NyatJImNQ'
     AWS_STORAGE_BUCKET_NAME = '3dvt-space'
+    AWS_DEFAULT_ACL = 'public-read'
     AWS_S3_ENDPOINT_URL = 'https://sgp1.digitaloceanspaces.com'
     AWS_S3_OBJECT_PARAMETERS = {
         'CacheControl': 'max-age=86400',
     }
 
-    # Static file
+    # Static file Settings
     AWS_LOCATION = 'static'
+    PUBLIC_MEDIA_LOCATION = 'media'
 
-    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    STATICFILES_STORAGE = 'backend.storage_backends.StaticStorage'
     STATIC_ROOT = 'static/'
-    STATIC_URL = 'https://%s/%s/' % (AWS_S3_ENDPOINT_URL, AWS_LOCATION)
+    STATIC_URL = f'https://{AWS_S3_ENDPOINT_URL}/{AWS_LOCATION}/'
 
-    # Media file
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    # Media file Settings
+    DEFAULT_FILE_STORAGE = 'backend.storage_backends.PublicMediaStorage'
     MEDIA_ROOT = 'media/'
-    MEDIA_URL = '/media/'
+    STATIC_URL = f'https://{AWS_S3_ENDPOINT_URL}/{PUBLIC_MEDIA_LOCATION}/'
 
 else:
     # Static files (CSS, JavaScript, Images)
@@ -53,7 +55,6 @@ else:
     MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
     # URL used to access the media
     MEDIA_URL = '/media/'
-
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-6+*os)*e3)2pq(zq7w#qarjp=ef^9xhbfstq12+#+mmazck8q$'
