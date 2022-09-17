@@ -63,17 +63,16 @@ SECRET_KEY = 'django-insecure-6+*os)*e3)2pq(zq7w#qarjp=ef^9xhbfstq12+#+mmazck8q$
 DEBUG = True
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:8000'
+    'http://128.199.227.198'
 ]
 # CORS_ALLOWED_ORIGIN_REGEXES = ["*"]
 CORS_ALLOW_ALL_ORIGINS = True
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:8000'
+    'http://128.199.227.198'
 ]
 ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'localhost',
+    '128.199.227.198'
 ]
 
 # CORS_ORIGIN_WHITELIST = [
@@ -156,12 +155,24 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'backendDB',
+            'USER': 'prabu',
+            'PASSWORD': 'f3rtu5k4rn0',
+            'HOST': 'localhost',
+            'PORT': '',
+        }
+    }    
 
 CACHES = {
     'default': {
