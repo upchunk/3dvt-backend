@@ -60,7 +60,7 @@ else:
 SECRET_KEY = 'django-insecure-6+*os)*e3)2pq(zq7w#qarjp=ef^9xhbfstq12+#+mmazck8q$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 CORS_ALLOWED_ORIGINS = [
     'http://128.199.227.198'
