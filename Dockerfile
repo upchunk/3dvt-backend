@@ -1,6 +1,6 @@
 FROM tensorflow/tensorflow:latest
 
-WORKDIR /backend
+WORKDIR /app/backend
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
