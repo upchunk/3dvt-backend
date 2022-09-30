@@ -1,9 +1,5 @@
-###########
-# BUILDER #
-###########
-
 # pull tensorflow base image
-FROM tensorflow/tensorflow:latest as builder
+FROM tensorflow/tensorflow:latest
 
 # set work directory
 WORKDIR /app/backend
@@ -12,61 +8,25 @@ WORKDIR /app/backend
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# install psycopg2 dependencies
-RUN apt-get update \
-    && apt-get install postgresql postgresql-contrib -y \
-    && apt-get install ffmpeg libsm6 libxext6  -y \
-    && apt-get install netcat -y
+# install psycopg2
+RUN apk update \
+    && apk add --virtual build-deps gcc python3-dev musl-dev \
+    && apk add postgresql-dev \
+    && pip install psycopg2 \
+    && apk del build-deps
 
-# lint
+# install dependencies
 RUN pip install --upgrade pip
-COPY . .
-
-# install dependencies
 COPY ./requirements.txt .
-RUN pip wheel --no-cache-dir --no-deps --wheel-dir /app/backend/wheels -r requirements.txt
+RUN pip install -r requirements.txt
 
-
-#########
-# FINAL #
-#########
-
-# pull official base image
-FROM tensorflow/tensorflow:latest
-
-# create directory for the app user
-RUN mkdir -p /home/app
-
-# create the app user
-RUN adduser --system prabu
-RUN addgroup app && adduser prabu app
-
-# create the appropriate directories
-ENV HOME=/home/app
-ENV APP_HOME=/home/app/backend
-RUN mkdir $APP_HOME
-WORKDIR $APP_HOME
-
-# install dependencies
-RUN apt-get update \
-    && apt-get install libpq5 -y
-COPY --from=builder /app/backend/wheels /wheels
-COPY --from=builder /app/backend/requirements.txt .
-RUN pip install --no-cache /wheels/*
-
-# copy entrypoint.prod.sh
+# copy entrypoint-prod.sh
 COPY ./entrypoint.prod.sh .
-RUN sed -i 's/\r$//g'  $APP_HOME/entrypoint.prod.sh
-RUN chmod +x  $APP_HOME/entrypoint.prod.sh
+RUN sed -i 's/\r$//g' /app/backend/entrypoint.prod.sh
+RUN chmod +x /app/backend/entrypoint.prod.sh
 
 # copy project
-COPY . $APP_HOME
-
-# chown all the files to the app user
-RUN chown -R app:app $APP_HOME
-
-# change to the app user
-USER app
+COPY . .
 
 # run entrypoint.prod.sh
-ENTRYPOINT ["/home/app/backend/entrypoint.prod.sh"]
+ENTRYPOINT ["/app/backend/entrypoint.prod.sh"]
