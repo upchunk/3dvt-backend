@@ -10,6 +10,12 @@ RUN apt-get update \
     && apt-get install postgresql postgresql-contrib -y \
     && apt-get install ffmpeg libsm6 libxext6  -y
 
+# copy entrypoint.sh
+COPY ./entrypoint.sh .
+RUN sed -i 's/\r$//g' /app/backend/entrypoint.sh
+RUN chmod +x /app/backend/entrypoint.sh
+
+# install requirements
 RUN pip install --upgrade pip
 COPY ./requirements.txt .
 RUN pip3 install -r requirements.txt
