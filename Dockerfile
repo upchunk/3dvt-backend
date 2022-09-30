@@ -17,7 +17,7 @@ RUN pip3 install -r requirements.txt
 
 # copy entrypoint.sh
 COPY ./entrypoint.sh .
-RUN ["sed", "-i", "'s/\r$//g'", "/app/backend/entrypoint.sh"]
+RUN sed -i 's/\r$//g' /app/backend/entrypoint.sh
 RUN ["chmod", "+x", "/app/backend/entrypoint.sh"]
 
 COPY . .
