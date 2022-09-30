@@ -38,7 +38,7 @@ FROM tensorflow/tensorflow:latest
 RUN mkdir -p /home/app
 
 # create the app user
-RUN addgroup -S app && adduser -S app -G app
+RUN addgroup app && adduser prabu app
 
 # create the appropriate directories
 ENV HOME=/home/app
