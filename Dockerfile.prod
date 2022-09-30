@@ -38,6 +38,7 @@ FROM tensorflow/tensorflow:latest
 RUN mkdir -p /home/app
 
 # create the app user
+RUN adduser --system prabu
 RUN addgroup app && adduser prabu app
 
 # create the appropriate directories
