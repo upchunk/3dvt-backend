@@ -1,9 +1,6 @@
 name: Continuous Integration and Delivery
 
-on:
-  push:
-    branches:
-      - do-app
+on: [push]
 
 env:
   WEB_IMAGE: ghcr.io/$(echo $GITHUB_REPOSITORY_OWNER )/app_backend
