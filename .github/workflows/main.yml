@@ -14,23 +14,23 @@ jobs:
     steps:
       - name: Checkout master
         uses: actions/checkout@v2
-      - name: Add environment variables to Github ENV
+      - name: Add environment variables to Github
         run: |  
-          echo "echo DEBUG=False >> .env"
-          echo "echo SQL_ENGINE=django.db.backends.postgresql >> .env"
-          echo "echo DATABASE=postgres >> .env"
-          echo "echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env"
-          echo "echo SQL_DATABASE=${{ secrets.SQL_DATABASE }} >> .env"
-          echo "echo SQL_USER=${{ secrets.SQL_USER }} >> .env"
-          echo "echo SQL_PASSWORD=${{ secrets.SQL_PASSWORD }} >> .env"
-          echo "echo SQL_HOST=${{ secrets.SQL_HOST }} >> .env"
-          echo "echo SQL_PORT=${{ secrets.SQL_PORT }} >> .env"
+          echo "DEBUG=0" >> .env
+          echo "SQL_ENGINE=django.db.backends.postgresql" >> .env
+          echo "DATABASE=postgres" >> .env
+          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+          echo "SQL_DATABASE=${{ secrets.SQL_DATABASE }}" >> .env
+          echo "SQL_USER=${{ secrets.SQL_USER }}" >> .env
+          echo "SQL_PASSWORD=${{ secrets.SQL_PASSWORD }}" >> .env
+          echo "SQL_HOST=${{ secrets.SQL_HOST }}" >> .env
+          echo "SQL_PORT=${{ secrets.SQL_PORT }}" >> .env
       - name: Set environment variables
         run: |
           echo "WEB_IMAGE=$(echo ${{env.WEB_IMAGE}} )" >> $GITHUB_ENV
           echo "NGINX_IMAGE=$(echo ${{env.NGINX_IMAGE}} )" >> $GITHUB_ENV
       - name: Log in to GitHub Packages
-        run: echo "${PERSONAL_ACCESS_TOKEN} | docker login ghcr.io -u ${{ secrets.NAMESPACE }} --password-stdin"
+        run: echo ${PERSONAL_ACCESS_TOKEN} | docker login ghcr.io -u ${{ secrets.NAMESPACE }} --password-stdin
         env:
           PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       - name: Pull images
