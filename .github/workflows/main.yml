@@ -14,17 +14,17 @@ jobs:
     steps:
       - name: Checkout master
         uses: actions/checkout@v2
-      - name: Add environment variables to .env
+      - name: Add environment variables to Github ENV
         run: |  
-          echo "DEBUG=False >> .env"
-          echo "SQL_ENGINE=django.db.backends.postgresql >> .env"
-          echo "DATABASE=postgres >> .env"
-          echo "SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env"
-          echo "SQL_DATABASE=${{ secrets.SQL_DATABASE }} >> .env"
-          echo "SQL_USER=${{ secrets.SQL_USER }} >> .env"
-          echo "SQL_PASSWORD=${{ secrets.SQL_PASSWORD }} >> .env"
-          echo "SQL_HOST=${{ secrets.SQL_HOST }} >> .env"
-          echo "SQL_PORT=${{ secrets.SQL_PORT }} >> .env"
+          echo "echo DEBUG=False >> .env"
+          echo "echo SQL_ENGINE=django.db.backends.postgresql >> .env"
+          echo "echo DATABASE=postgres >> .env"
+          echo "echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env"
+          echo "echo SQL_DATABASE=${{ secrets.SQL_DATABASE }} >> .env"
+          echo "echo SQL_USER=${{ secrets.SQL_USER }} >> .env"
+          echo "echo SQL_PASSWORD=${{ secrets.SQL_PASSWORD }} >> .env"
+          echo "echo SQL_HOST=${{ secrets.SQL_HOST }} >> .env"
+          echo "echo SQL_PORT=${{ secrets.SQL_PORT }} >> .env"
       - name: Set environment variables
         run: |
           echo "WEB_IMAGE=$(echo ${{env.WEB_IMAGE}} )" >> $GITHUB_ENV
