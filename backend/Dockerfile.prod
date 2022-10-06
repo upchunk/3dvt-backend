@@ -20,10 +20,9 @@ COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
 # copy entrypoint-prod.sh
-RUN chmod +x ./entrypoint.prod.sh
 COPY ./entrypoint.prod.sh .
 RUN sed -i 's/\r$//g' /app/backend/entrypoint.prod.sh
-RUN chmod +x /app/backend/entrypoint.prod.sh
+RUN chmod u+x /app/backend/entrypoint.prod.sh
 
 # copy project
 COPY . .

@@ -79,7 +79,7 @@ jobs:
       - name: Deploy env file and docker file to remote Host
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-        run: scp  -o StrictHostKeyChecking=no -r ./.env ./docker-compose.yml root@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }}:/app
+        run: scp  -o StrictHostKeyChecking=no -r ./.env ./docker-compose.prod.yml root@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }}:/app
       - name: Build and deploy images to DigitalOcean
         uses: appleboy/ssh-action@master
         with:
