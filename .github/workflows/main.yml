@@ -87,6 +87,7 @@ jobs:
           username: root
           key: ${{ secrets.PRIVATE_KEY }}
           script: |
+            whoami
             cd /app
             ls -al
             source .env.prod
