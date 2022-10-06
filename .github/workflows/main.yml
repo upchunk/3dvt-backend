@@ -3,8 +3,8 @@ name: Continuous Integration and Delivery
 on: [push]
 
 env:
-  BACKEND_IMAGE: ghcr.io/$(echo $GITHUB_REPOSITORY_OWNER )/app_backend
-  NGINX_IMAGE: ghcr.io/$(echo $GITHUB_REPOSITORY_OWNER )/app_nginx
+  BACKEND_IMAGE: ghcr.io/$(echo $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]')/app_backend
+  NGINX_IMAGE: ghcr.io/$(echo $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]')/app_nginx
 
 jobs:
 
@@ -44,3 +44,48 @@ jobs:
         run: |
           docker push ${{ env.BACKEND_IMAGE }}
           docker push ${{ env.NGINX_IMAGE }}
+  
+  deploy:
+    name: Deploy to DigitalOcean
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/do-app'
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@v2
+      - name: Add environment variables to .env.prod
+        run: |
+          echo "DEBUG=False" >> .env.prod
+          echo "SQL_ENGINE=django.db.backends.postgresql" >> .env.prod
+          echo "DATABASE=postgres" >> .env.prod
+          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env.prod
+          echo "SQL_DATABASE=${{ secrets.SQL_DATABASE }}" >> .env.prod
+          echo "SQL_USER=${{ secrets.SQL_USER }}" >> .env.prod
+          echo "SQL_PASSWORD=${{ secrets.SQL_PASSWORD }}" >> .env.prod
+          echo "SQL_HOST=${{ secrets.SQL_HOST }}" >> .env.prod
+          echo "SQL_PORT=${{ secrets.SQL_PORT }}" >> .env.prod
+          echo "WEB_IMAGE=${{ env.WEB_IMAGE }}" >> .env.prod
+          echo "NGINX_IMAGE=${{ env.NGINX_IMAGE }}" >> .env.prod
+          echo "NAMESPACE=${{ secrets.NAMESPACE }}" >> .env.prod
+          echo "PERSONAL_ACCESS_TOKEN=${{ secrets.PERSONAL_ACCESS_TOKEN }}" >> .env.prod
+      - name: Add the private SSH key to the ssh-agent
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: |
+          mkdir -p ~/.ssh
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          ssh-add - <<< "${{ secrets.PRIVATE_KEY }}"
+      - name: Build and deploy images on DigitalOcean
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: |
+          scp  -o StrictHostKeyChecking=no -r ./.env.prod ./docker-compose.prod.yml root@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }}:/app
+          ssh -o StrictHostKeyChecking=no root@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }} << 'ENDSSH'
+            cd /app
+            source .env.prod
+            docker login ghcr.io -u $NAMESPACE -p $PERSONAL_ACCESS_TOKEN
+            docker pull $WEB_IMAGE
+            docker pull $NGINX_IMAGE
+            docker-compose -f docker-compose.prod.yml up -d
+          ENDSSH
