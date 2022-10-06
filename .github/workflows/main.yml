@@ -64,7 +64,7 @@ jobs:
           echo "SQL_PASSWORD=${{ secrets.SQL_PASSWORD }}" >> .env.prod
           echo "SQL_HOST=${{ secrets.SQL_HOST }}" >> .env.prod
           echo "SQL_PORT=${{ secrets.SQL_PORT }}" >> .env.prod
-          echo "WEB_IMAGE=${{ env.WEB_IMAGE }}" >> .env.prod
+          echo "BACKEND_IMAGE=${{ env.BACKEND_IMAGE }}" >> .env.prod
           echo "NGINX_IMAGE=${{ env.NGINX_IMAGE }}" >> .env.prod
           echo "NAMESPACE=${{ secrets.NAMESPACE }}" >> .env.prod
           echo "PERSONAL_ACCESS_TOKEN=${{ secrets.PERSONAL_ACCESS_TOKEN }}" >> .env.prod
@@ -85,7 +85,7 @@ jobs:
             cd /app
             source .env.prod
             docker login ghcr.io -u $NAMESPACE -p $PERSONAL_ACCESS_TOKEN
-            docker pull $WEB_IMAGE
+            docker pull $BACKEND_IMAGE
             docker pull $NGINX_IMAGE
             docker-compose -f docker-compose.prod.yml up -d
           ENDSSH
