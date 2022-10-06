@@ -53,21 +53,21 @@ jobs:
     steps:
       - name: Checkout master
         uses: actions/checkout@v2
-      - name: Add environment variables to .env.prod
+      - name: Add environment variables to .env
         run: |
-          echo "DEBUG=False" >> .env.prod
-          echo "SQL_ENGINE=django.db.backends.postgresql" >> .env.prod
-          echo "DATABASE=postgres" >> .env.prod
-          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env.prod
-          echo "SQL_DATABASE=${{ secrets.SQL_DATABASE }}" >> .env.prod
-          echo "SQL_USER=${{ secrets.SQL_USER }}" >> .env.prod
-          echo "SQL_PASSWORD=${{ secrets.SQL_PASSWORD }}" >> .env.prod
-          echo "SQL_HOST=${{ secrets.SQL_HOST }}" >> .env.prod
-          echo "SQL_PORT=${{ secrets.SQL_PORT }}" >> .env.prod
-          echo "BACKEND_IMAGE=${{ env.BACKEND_IMAGE }}" >> .env.prod
-          echo "NGINX_IMAGE=${{ env.NGINX_IMAGE }}" >> .env.prod
-          echo "NAMESPACE=${{ secrets.NAMESPACE }}" >> .env.prod
-          echo "PERSONAL_ACCESS_TOKEN=${{ secrets.PERSONAL_ACCESS_TOKEN }}" >> .env.prod
+          echo "DEBUG=False" >> .env
+          echo "SQL_ENGINE=django.db.backends.postgresql" >> .env
+          echo "DATABASE=postgres" >> .env
+          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+          echo "SQL_DATABASE=${{ secrets.SQL_DATABASE }}" >> .env
+          echo "SQL_USER=${{ secrets.SQL_USER }}" >> .env
+          echo "SQL_PASSWORD=${{ secrets.SQL_PASSWORD }}" >> .env
+          echo "SQL_HOST=${{ secrets.SQL_HOST }}" >> .env
+          echo "SQL_PORT=${{ secrets.SQL_PORT }}" >> .env
+          echo "BACKEND_IMAGE=${{ env.BACKEND_IMAGE }}" >> .env
+          echo "NGINX_IMAGE=${{ env.NGINX_IMAGE }}" >> .env
+          echo "NAMESPACE=${{ secrets.NAMESPACE }}" >> .env
+          echo "PERSONAL_ACCESS_TOKEN=${{ secrets.PERSONAL_ACCESS_TOKEN }}" >> .env
       - name: Add the private SSH key to the ssh-agent
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
@@ -79,7 +79,7 @@ jobs:
       - name: Deploy env file and docker file to remote Host
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-        run: scp  -o StrictHostKeyChecking=no -r ./.env.prod ./docker-compose.prod.yml root@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }}:/app
+        run: scp  -o StrictHostKeyChecking=no -r ./.env ./docker-compose.yml root@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }}:/app
       - name: Build and deploy images to DigitalOcean
         uses: appleboy/ssh-action@master
         with:
@@ -88,7 +88,7 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           script: |
             cd /app
-            source .env.prod
+            source .env
             docker login ghcr.io -u $NAMESPACE -p $PERSONAL_ACCESS_TOKEN
             docker pull $BACKEND_IMAGE
             docker pull $NGINX_IMAGE
