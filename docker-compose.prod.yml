@@ -5,12 +5,10 @@ services:
     expose:
       - 8000
     env_file:
-      - ./backend/.env.prod
+      - .env.prod
   nginx:
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile.prod
+    image: "${NGINX_IMAGE}"
     ports:
-      - "80:80"
+      - 80:80
     depends_on:
       - backend
