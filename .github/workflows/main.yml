@@ -87,9 +87,7 @@ jobs:
           username: root
           key: ${{ secrets.PRIVATE_KEY }}
           script: |
-            whoami
             cd /app
-            ls -al
             source .env.prod
             docker login ghcr.io -u $NAMESPACE -p $PERSONAL_ACCESS_TOKEN
             docker pull $BACKEND_IMAGE
