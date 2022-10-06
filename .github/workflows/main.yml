@@ -76,16 +76,20 @@ jobs:
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           ssh-add - <<< "${{ secrets.PRIVATE_KEY }}"
-      - name: Build and deploy images on DigitalOcean
+      - name: Deploy env file and docker file to remote Host
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-        run: |
-          scp  -o StrictHostKeyChecking=no -r ./.env.prod ./docker-compose.prod.yml root@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }}:/app
-          ssh -o StrictHostKeyChecking=no root@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }} << 'ENDSSH'
-            source /app/.env.prod
+        run: scp  -o StrictHostKeyChecking=no -r ./.env.prod ./docker-compose.prod.yml root@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }}:/app
+      - name: Build and deploy images to DigitalOcean
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }}
+          username: root
+          key: ${{ secrets.PRIVATE_KEY }}
+          script: |
+            cd /app
+            source .env.prod
             docker login ghcr.io -u $NAMESPACE -p $PERSONAL_ACCESS_TOKEN
-            docker pull $BACKEND_IMAGE
+            docker pull $WEB_IMAGE
             docker pull $NGINX_IMAGE
-            docker-compose -f /app/docker-compose.prod.yml up -d
-          ENDSSH
-          
+            docker-compose -f docker-compose.prod.yml up -d
