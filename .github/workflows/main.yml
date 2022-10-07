@@ -33,6 +33,10 @@ jobs:
         run: echo ${PERSONAL_ACCESS_TOKEN} | docker login ghcr.io -u ${{ secrets.NAMESPACE }} --password-stdin
         env:
           PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+      - name: Change entrypoint permission
+        run: |
+          chown +x entrypoint.prod.sh
+          ls -la
       - name: Pull images
         run: |
           docker pull ${{ env.BACKEND_IMAGE }} || true
