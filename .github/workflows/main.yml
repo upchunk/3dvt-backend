@@ -68,7 +68,6 @@ jobs:
           echo "NGINX_IMAGE=${{ env.NGINX_IMAGE }}" >> .env
           echo "NAMESPACE=${{ secrets.NAMESPACE }}" >> .env
           echo "PERSONAL_ACCESS_TOKEN=${{ secrets.PERSONAL_ACCESS_TOKEN }}" >> .env
-          echo "DOCKER_BUILDKIT=1" >> .env
       - name: Add the private SSH key to the ssh-agent
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
@@ -93,4 +92,4 @@ jobs:
             docker login ghcr.io -u $NAMESPACE -p $PERSONAL_ACCESS_TOKEN
             docker pull $BACKEND_IMAGE
             docker pull $NGINX_IMAGE
-            docker-compose -f docker-compose.prod.yml up -d
+            DOCKER_BUILDKIT=1 docker-compose -f docker-compose.prod.yml up -d
