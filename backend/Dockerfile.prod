@@ -20,7 +20,8 @@ COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
 # copy entrypoint-prod.sh
-COPY --chmod=777 ./entrypoint.prod.sh .
+COPY ./entrypoint.prod.sh .
+RUN /bin/bash -c 'ls -la; chmod +x /app/backend/entrypoint.prod.sh; ls -la'
 
 # copy project
 COPY . .

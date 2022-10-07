@@ -92,4 +92,4 @@ jobs:
             docker login ghcr.io -u $NAMESPACE -p $PERSONAL_ACCESS_TOKEN
             docker pull $BACKEND_IMAGE
             docker pull $NGINX_IMAGE
-            DOCKER_BUILDKIT=1 docker-compose -f docker-compose.prod.yml up -d
+            docker-compose -f docker-compose.prod.yml up -d
