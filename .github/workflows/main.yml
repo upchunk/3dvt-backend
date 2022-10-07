@@ -60,7 +60,7 @@ jobs:
       - name: Add environment variables to .env
         run: |
           echo "DEBUG=False" >> .env
-          echo "SQL_ENGINE=django.db.backends.postgresql" >> .env
+          echo "SQL_ENGINE=django.db.backends.postgresql_psycopg2" >> .env
           echo "DATABASE=postgres" >> .env
           echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
           echo "SQL_DATABASE=${{ secrets.SQL_DATABASE }}" >> .env
