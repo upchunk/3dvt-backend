@@ -2,7 +2,7 @@
 FROM tensorflow/tensorflow:latest
 
 # set work directory
-WORKDIR /app/backend
+WORKDIR /usr/src/app/backend
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -21,10 +21,10 @@ RUN pip install -r requirements.txt
 
 # copy entrypoint-prod.sh
 COPY ./entrypoint.prod.sh .
-RUN chmod +x /app/backend/entrypoint.prod.sh
+RUN chmod +x /usr/src/app/backend/entrypoint.prod.sh
 
 # copy project
 COPY . .
 
 # run entrypoint.prod.sh
-ENTRYPOINT ["/app/backend/entrypoint.prod.sh"]
+ENTRYPOINT ["/usr/src/app/backend/entrypoint.prod.sh"]
