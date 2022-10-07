@@ -57,24 +57,17 @@ else:
     MEDIA_URL = '/media/'
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-6+*os)*e3)2pq(zq7w#qarjp=ef^9xhbfstq12+#+mmazck8q$'
+SECRET_KEY = os.environ.get("SECRET_KEY", 'django-insecure-6+*os)*e3)2pq(zq7w#qarjp=ef^9xhbfstq12+#+mmazck8q$')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", 'True') == 'True'
 
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:8000'
-]
+CORS_ALLOWED_ORIGINS = os.environ.get("CORS_ALLOWED_ORIGINS", "http://localhost:8000 http://localhost:8080").split(" ")
 # CORS_ALLOWED_ORIGIN_REGEXES = ["*"]
 CORS_ALLOW_ALL_ORIGINS = True
 
-CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:8000'
-]
-ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'localhost',
-]
+CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS", "http://localhost:8080 http://localhost:8000").split(" ")
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1 localhost").split(" ")
 
 # CORS_ORIGIN_WHITELIST = [
 #     'http://localhost:8000',
@@ -157,11 +150,15 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
+        "NAME": os.environ.get("SQL_DATABASE", BASE_DIR / "db.sqlite3"),
+        "USER": os.environ.get("SQL_USER", "user"),
+        "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
+        "HOST": os.environ.get("SQL_HOST", "localhost"),
+        "PORT": os.environ.get("SQL_PORT", "5432"),
     }
-}
+} 
 
 CACHES = {
     'default': {

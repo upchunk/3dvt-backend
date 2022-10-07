@@ -118,7 +118,7 @@ def get_model():
 # ------------- MAIN FUNCTION ---------------------------------#
 # Load Pretrained Model
 model = get_model()
-model.load_weights("api\scripts\model_tesis_epoch20_sz448.hdf5")
+model.load_weights("api/scripts/model_tesis_epoch20_sz448.hdf5")
 
 
 def segmentation(user, image, task=None):
