@@ -5,9 +5,6 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import Group
 import arrow
-
-import arrow
-
 from api.models import ImageData, LandingPage, TaskHistory, Users
 
 
@@ -124,7 +121,7 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
                 )
 
             return attrs
-        except:
+        except Exception:
             raise serializers.ValidationError({"This fields may not be blank."})
 
     def validate_old_password(self, value):
@@ -210,4 +207,4 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 class LandingPageSerializer(serializers.ModelSerializer):
     class Meta:
         model = LandingPage
-        fields = "__all__ "
+        fields = "__all__"
