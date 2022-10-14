@@ -121,7 +121,7 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
                 )
 
             return attrs
-        except Exception:
+        except:
             raise serializers.ValidationError({"This fields may not be blank."})
 
     def validate_old_password(self, value):

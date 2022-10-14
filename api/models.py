@@ -118,7 +118,7 @@ class LandingPage(models.Model):
         max_length=50,
         help_text=_("Corresponding Landing Page's Section"),
     )
-    section_title = models.CharField(
+    title = models.CharField(
         _("title"),
         max_length=50,
         default=str,
