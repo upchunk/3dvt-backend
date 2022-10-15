@@ -1,8 +1,8 @@
-import boto3
+from boto3.session import Session
 
 SPACE_NAME = "3dvt-space"
 
-session = boto3.session.Session()
+session = Session()
 client = session.client(
     "s3",
     region_name="sgp1",
