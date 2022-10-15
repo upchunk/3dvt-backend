@@ -144,12 +144,11 @@ class LandingPage(models.Model):
         null=True,
         help_text=_("Optional Image for Landing Page's Section"),
     )
-    file = models.FileField(
-        null=True,
-        help_text=_("Optional File for Landing Page's Section"),
-    )
     kwargs = models.JSONField(
         default=dict,
         null=True,
         help_text=_("Optional kwargs for Landing Page's Section"),
     )
+
+    class Meta:
+        ordering = ["section"]
