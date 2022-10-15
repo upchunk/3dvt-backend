@@ -28,11 +28,12 @@ from api.serializers import (
     LandingPageSerializer,
     MyTokenObtainPairSerializer,
     RegisterSerializer,
+    ResearcherSerializer,
     TaskHistorySerializer,
     UpdateUserSerializer,
     UsersSerializer,
 )
-from api.models import ImageData, LandingPage, TaskHistory, Users
+from api.models import ImageData, LandingPage, Researcher, TaskHistory, Users
 from django.contrib.auth.models import Group
 
 inDevelopment = True
@@ -216,6 +217,14 @@ class ReconstructionTaskViewSet(viewsets.ModelViewSet):
     pagination_class = StandardSetPagination
     queryset = TaskHistory.objects.all()
     filterset_fields = ("groupname", "status")
+    if inDevelopment:
+        permission_classes = [AllowAny]
+
+
+class ResearcherViewSet(viewsets.ModelViewSet):
+    serializer_class = ResearcherSerializer
+    pagination_class = StandardSetPagination
+    queryset = Researcher.objects.all()
     if inDevelopment:
         permission_classes = [AllowAny]
 

@@ -102,6 +102,26 @@ class ImageData(models.Model):
     )
 
 
+class Researcher(models.Model):
+    name = models.CharField(
+        _("Name"),
+        primary_key=True,
+        max_length=50,
+        help_text=_("Researcher's Name"),
+    )
+    avatar = models.ImageField(
+        _("Avatar"), null=True, help_text=_("Researcher's Avatar")
+    )
+    link = models.URLField(
+        _("link"), null=True, help_text=_("Researcher's Profile Link on ITS Webiste")
+    )
+    kwargs = models.JSONField(
+        default=dict,
+        null=True,
+        help_text=_("Optional kwargs for Researcher Section"),
+    )
+
+
 class LandingPage(models.Model):
     section = models.CharField(
         _("Section"),
@@ -128,8 +148,8 @@ class LandingPage(models.Model):
         null=True,
         help_text=_("Optional File for Landing Page's Section"),
     )
-    link = models.JSONField(
+    kwargs = models.JSONField(
         default=dict,
         null=True,
-        help_text=_("Optional External Link(s) for Landing Page's Section"),
+        help_text=_("Optional kwargs for Landing Page's Section"),
     )

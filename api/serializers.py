@@ -5,7 +5,7 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import Group
 import arrow
-from api.models import ImageData, LandingPage, TaskHistory, Users
+from api.models import ImageData, LandingPage, Researcher, TaskHistory, Users
 
 
 def uploaded():
@@ -202,6 +202,12 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token["username"] = Users.username
 
         return token
+
+
+class ResearcherSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Researcher
+        fields = "__all__"
 
 
 class LandingPageSerializer(serializers.ModelSerializer):
