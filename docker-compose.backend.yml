@@ -6,9 +6,3 @@ services:
       - 8000
     env_file:
       - .env
-  nginx:
-    image: "${NGINX_IMAGE}"
-    ports:
-      - 80:80
-    depends_on:
-      - backend
