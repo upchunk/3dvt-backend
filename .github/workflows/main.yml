@@ -6,7 +6,6 @@ env:
   BACKEND_IMAGE: ghcr.io/$(echo $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]')/app_backend
 
 jobs:
-
   build:
     name: Build Docker Images
     runs-on: ubuntu-latest
@@ -14,7 +13,7 @@ jobs:
       - name: Checkout master
         uses: actions/checkout@v2
       - name: Add environment variables to Github
-        run: |  
+        run: |
           echo "DEBUG=0" >> .env
           echo "SQL_ENGINE=django.db.backends.postgresql" >> .env
           echo "DATABASE=postgres" >> .env
@@ -27,6 +26,8 @@ jobs:
           echo "SQL_PASSWORD=${{ secrets.SQL_PASSWORD }}" >> .env
           echo "SQL_HOST=${{ secrets.SQL_HOST }}" >> .env
           echo "SQL_PORT=${{ secrets.SQL_PORT }}" >> .env
+          echo "PERSONAL_ACCESS_TOKEN=${{ secrets.PERSONAL_ACCESS_TOKEN }}" >> .env
+          echo "DIGITAL_OCEAN_ACCESS_TOKEN=${{ secrets.DIGITAL_OCEAN_ACCESS_TOKEN }}" >> .env
       - name: Set environment variables
         run: |
           echo "BACKEND_IMAGE=$(echo ${{env.BACKEND_IMAGE}} )" >> $GITHUB_ENV
@@ -47,12 +48,12 @@ jobs:
       - name: Push images
         run: |
           docker push ${{ env.BACKEND_IMAGE }}
-  
+          docker push ${{ env.NGINX_IMAGE }}
   deploy:
     name: Deploy to DigitalOcean
     runs-on: ubuntu-latest
     needs: build
-    if: github.ref == 'refs/heads/do-app'
+    if: github.ref == 'refs/heads/dev'
     steps:
       - name: Checkout master
         uses: actions/checkout@v2
@@ -73,6 +74,7 @@ jobs:
           echo "BACKEND_IMAGE=${{ env.BACKEND_IMAGE }}" >> .env
           echo "NAMESPACE=${{ secrets.NAMESPACE }}" >> .env
           echo "PERSONAL_ACCESS_TOKEN=${{ secrets.PERSONAL_ACCESS_TOKEN }}" >> .env
+          echo "DIGITAL_OCEAN_ACCESS_TOKEN=${{ secrets.DIGITAL_OCEAN_ACCESS_TOKEN }}" >> .env
       - name: Add the private SSH key to the ssh-agent
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
@@ -97,3 +99,5 @@ jobs:
             docker login ghcr.io -u $NAMESPACE -p $PERSONAL_ACCESS_TOKEN
             docker pull $BACKEND_IMAGE
             docker-compose -f docker-compose.backend.yml up -d
+            docker pull $NGINX_IMAGE
+            docker-compose -f docker-compose.prod.yml up -d
