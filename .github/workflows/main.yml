@@ -1,0 +1,109 @@
+name: Continuous Integration and Delivery
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+
+env:
+  BACKEND_IMAGE: ghcr.io/$(echo $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]')/app_backend
+
+jobs:
+  build:
+    name: Build Docker Images
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@v2
+      - name: Add environment variables to Github
+        run: |
+          echo "DEBUG=0" >> .env
+          echo "SQL_ENGINE=django.db.backends.postgresql" >> .env
+          echo "DATABASE=postgres" >> .env
+          echo "DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }}" >> .env
+          echo "CORS_ALLOWED_ORIGINS=http://3dvtusg.com:8000 http://localhost:8000 http://127.0.0.1:8000" >> .env
+          echo "CSRF_TRUSTED_ORIGINS=http://3dvtusg.com:8000 http://localhost:8000 http://127.0.0.1:8000" >> .env
+          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+          echo "SQL_DATABASE=${{ secrets.SQL_DATABASE }}" >> .env
+          echo "SQL_USER=${{ secrets.SQL_USER }}" >> .env
+          echo "SQL_PASSWORD=${{ secrets.SQL_PASSWORD }}" >> .env
+          echo "SQL_HOST=${{ secrets.SQL_HOST }}" >> .env
+          echo "SQL_PORT=${{ secrets.SQL_PORT }}" >> .env
+          echo "PERSONAL_ACCESS_TOKEN=${{ secrets.PERSONAL_ACCESS_TOKEN }}" >> .env
+          echo "DIGITAL_OCEAN_ACCESS_TOKEN=${{ secrets.DIGITAL_OCEAN_ACCESS_TOKEN }}" >> .env
+      - name: Set environment variables
+        run: |
+          echo "BACKEND_IMAGE=$(echo ${{env.BACKEND_IMAGE}} )" >> $GITHUB_ENV
+      - name: Log in to GitHub Packages
+        run: echo ${PERSONAL_ACCESS_TOKEN} | docker login ghcr.io -u ${{ secrets.NAMESPACE }} --password-stdin
+        env:
+          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+      - name: Change entrypoint permission
+        run: |
+          chmod +x backend/entrypoint.prod.sh
+          ls -la backend
+      - name: Pull images
+        run: |
+          docker pull ${{ env.BACKEND_IMAGE }} || true
+      - name: Build images
+        run: |
+          docker-compose -f docker-compose.ci.yml build
+      - name: Push images
+        run: |
+          docker push ${{ env.BACKEND_IMAGE }}
+          docker push ${{ env.NGINX_IMAGE }}
+  deploy:
+    name: Deploy to DigitalOcean
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/develop'
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@v2
+      - name: Add environment variables to .env
+        run: |
+          echo "DEBUG=False" >> .env
+          echo "SQL_ENGINE=django.db.backends.postgresql_psycopg2" >> .env
+          echo "DATABASE=postgres" >> .env
+          echo "DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }}" >> .env
+          echo "CORS_ALLOWED_ORIGINS=${{ secrets.CORS_ALLOWED_ORIGINS }}" >> .env
+          echo "CSRF_TRUSTED_ORIGINS=${{ secrets.CSRF_TRUSTED_ORIGINS }}" >> .env
+          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+          echo "SQL_DATABASE=${{ secrets.SQL_DATABASE }}" >> .env
+          echo "SQL_USER=${{ secrets.SQL_USER }}" >> .env
+          echo "SQL_PASSWORD=${{ secrets.SQL_PASSWORD }}" >> .env
+          echo "SQL_HOST=${{ secrets.SQL_HOST }}" >> .env
+          echo "SQL_PORT=${{ secrets.SQL_PORT }}" >> .env
+          echo "BACKEND_IMAGE=${{ env.BACKEND_IMAGE }}" >> .env
+          echo "NAMESPACE=${{ secrets.NAMESPACE }}" >> .env
+          echo "PERSONAL_ACCESS_TOKEN=${{ secrets.PERSONAL_ACCESS_TOKEN }}" >> .env
+          echo "DIGITAL_OCEAN_ACCESS_TOKEN=${{ secrets.DIGITAL_OCEAN_ACCESS_TOKEN }}" >> .env
+      - name: Add the private SSH key to the ssh-agent
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: |
+          mkdir -p ~/.ssh
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          ssh-add - <<< "${{ secrets.PRIVATE_KEY }}"
+      - name: Deploy env file and docker file to remote Host
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: scp  -o StrictHostKeyChecking=no -r ./.env ./docker-compose.backend.yml root@${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }}:/home/prabu/app
+      - name: Build and deploy images to DigitalOcean
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DIGITAL_OCEAN_IP_ADDRESS }}
+          username: root
+          key: ${{ secrets.PRIVATE_KEY }}
+          script: |
+            cd /home/prabu/app
+            source .env
+            docker login ghcr.io -u $NAMESPACE -p $PERSONAL_ACCESS_TOKEN
+            docker pull $BACKEND_IMAGE
+            docker-compose -f docker-compose.backend.yml up -d
+            docker pull $NGINX_IMAGE
+            docker-compose -f docker-compose.prod.yml up -d

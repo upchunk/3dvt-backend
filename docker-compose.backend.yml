@@ -1,0 +1,8 @@
+services:
+  backend:
+    image: "${BACKEND_IMAGE}"
+    command: gunicorn backend.wsgi:application --bind 0.0.0.0:8000
+    expose:
+      - 8000
+    env_file:
+      - .env
