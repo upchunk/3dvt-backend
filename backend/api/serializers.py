@@ -5,7 +5,15 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import Group
 import arrow
-from api.models import ImageData, LandingPage, Researcher, TaskHistory, Users
+from api.models import (
+    Publication,
+    ImageData,
+    LandingPage,
+    Researcher,
+    TaskHistory,
+    Users,
+    TaskImageMapping,
+)
 
 
 def uploaded():
@@ -192,6 +200,12 @@ class TaskHistorySerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class TaskImageMappingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TaskImageMapping
+        fields = "__all__"
+
+
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, Users):
@@ -204,13 +218,19 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token
 
 
+class LandingPageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LandingPage
+        fields = "__all__"
+
+
 class ResearcherSerializer(serializers.ModelSerializer):
     class Meta:
         model = Researcher
         fields = "__all__"
 
 
-class LandingPageSerializer(serializers.ModelSerializer):
+class PublicationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = LandingPage
+        model = Publication
         fields = "__all__"

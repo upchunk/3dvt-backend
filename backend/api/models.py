@@ -91,34 +91,33 @@ class ImageData(models.Model):
         null=True,
         help_text=_("Corresponding Task"),
     )
-    images = models.FileField(
+    images = models.ImageField(
         _("images"),
         upload_to=ImageDataset,
         null=True,
         help_text=_("Image File to be Processed"),
     )
     result = models.ImageField(
-        upload_to=ResultDataset, null=True, blank=True, help_text=_("Image Result")
+        _("result"),
+        upload_to=ResultDataset,
+        null=True,
+        blank=True,
+        help_text=_("Image Result"),
     )
 
 
-class Researcher(models.Model):
-    name = models.CharField(
-        _("Name"),
-        max_length=50,
-        null=True,
-        help_text=_("Researcher's Name"),
+class TaskImageMapping(models.Model):
+    Task = models.ForeignKey(
+        TaskHistory,
+        verbose_name=_("Task"),
+        on_delete=models.CASCADE,
+        help_text=_("Corresponding Task"),
     )
-    avatar = models.ImageField(
-        _("Avatar"), null=True, help_text=_("Researcher's Avatar")
-    )
-    link = models.URLField(
-        _("link"), null=True, help_text=_("Researcher's Profile Link on ITS Webiste")
-    )
-    kwargs = models.JSONField(
-        default=dict,
-        null=True,
-        help_text=_("Optional kwargs for Researcher Section"),
+    Images = models.ForeignKey(
+        ImageData,
+        verbose_name=_("Images"),
+        on_delete=models.CASCADE,
+        help_text=_("Corresponding Task Images"),
     )
 
 
@@ -152,3 +151,38 @@ class LandingPage(models.Model):
 
     class Meta:
         ordering = ["section"]
+
+
+class Publication(models.Model):
+    name = models.CharField(
+        _("Name"),
+        max_length=50,
+        default=str,
+        help_text=_("Publication Name / Synopsis"),
+    )
+    link = models.URLField(_("link"), null=True, help_text=_("Publication Link"))
+    description = models.TextField(
+        _("Description"),
+        null=True,
+        help_text=_("Publication Details"),
+    )
+
+
+class Researcher(models.Model):
+    name = models.CharField(
+        _("Name"),
+        max_length=50,
+        null=True,
+        help_text=_("Researcher's Name"),
+    )
+    avatar = models.ImageField(
+        _("Avatar"), null=True, help_text=_("Researcher's Avatar")
+    )
+    link = models.URLField(
+        _("link"), null=True, help_text=_("Researcher's Profile Link on ITS Webiste")
+    )
+    kwargs = models.JSONField(
+        default=dict,
+        null=True,
+        help_text=_("Optional kwargs for Researcher Section"),
+    )

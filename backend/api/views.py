@@ -32,8 +32,18 @@ from api.serializers import (
     TaskHistorySerializer,
     UpdateUserSerializer,
     UsersSerializer,
+    PublicationSerializer,
+    TaskImageMappingSerializer,
 )
-from api.models import ImageData, LandingPage, Researcher, TaskHistory, Users
+from api.models import (
+    ImageData,
+    LandingPage,
+    Researcher,
+    TaskHistory,
+    Users,
+    Publication,
+    TaskImageMapping,
+)
 from django.contrib.auth.models import Group
 
 inDevelopment = True
@@ -221,11 +231,10 @@ class ReconstructionTaskViewSet(viewsets.ModelViewSet):
         permission_classes = [AllowAny]
 
 
-class ResearcherViewSet(viewsets.ModelViewSet):
-    serializer_class = ResearcherSerializer
+class TaskImageMappingViewSet(viewsets.ModelViewSet):
+    serializer_class = TaskImageMappingSerializer
     pagination_class = StandardSetPagination
-    parser_classes = [MultiPartParser, FormParser, JSONParser]
-    queryset = Researcher.objects.all()
+    queryset = TaskImageMapping.objects.all()
     if inDevelopment:
         permission_classes = [AllowAny]
 
@@ -235,5 +244,22 @@ class LandingPageViewSet(viewsets.ModelViewSet):
     pagination_class = StandardSetPagination
     parser_classes = [MultiPartParser, FormParser, JSONParser]
     queryset = LandingPage.objects.all()
+    if inDevelopment:
+        permission_classes = [AllowAny]
+
+
+class ResearcherViewSet(viewsets.ModelViewSet):
+    serializer_class = ResearcherSerializer
+    pagination_class = StandardSetPagination
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
+    queryset = Researcher.objects.all()
+    if inDevelopment:
+        permission_classes = [AllowAny]
+
+
+class PublicationViewSet(viewsets.ModelViewSet):
+    serializer_class = PublicationSerializer
+    pagination_class = StandardSetPagination
+    queryset = Publication.objects.all()
     if inDevelopment:
         permission_classes = [AllowAny]

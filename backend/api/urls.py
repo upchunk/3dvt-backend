@@ -19,6 +19,8 @@ from api.views import (
     SegmentationTaskViewSet,
     UpdateProfileView,
     UserViewSet,
+    PublicationViewSet,
+    TaskImageMappingViewSet,
 )
 
 
@@ -31,8 +33,12 @@ router.register(r"segmentation", SegmentationTaskViewSet, basename="segmentation
 router.register(
     r"reconstruction", ReconstructionTaskViewSet, basename="reconstruction_tasks"
 )
-router.register(r"researcher", ResearcherViewSet, basename="researcher")
+router.register(
+    r"TaskImageMapping", TaskImageMappingViewSet, basename="TaskImageMapping"
+)
 router.register(r"landingPage", LandingPageViewSet, basename="landing_pages")
+router.register(r"researcher", ResearcherViewSet, basename="researcher")
+router.register(r"publication", PublicationViewSet, basename="publication")
 
 urlpatterns = [
     path("token/", MyTokenObtainPairView.as_view(), name="token_obtain_pair"),
