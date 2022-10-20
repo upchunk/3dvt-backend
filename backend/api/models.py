@@ -105,8 +105,8 @@ class ImageData(models.Model):
 class Researcher(models.Model):
     name = models.CharField(
         _("Name"),
-        primary_key=True,
         max_length=50,
+        null=True,
         help_text=_("Researcher's Name"),
     )
     avatar = models.ImageField(

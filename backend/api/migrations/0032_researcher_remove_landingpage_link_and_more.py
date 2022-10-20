@@ -14,12 +14,20 @@ class Migration(migrations.Migration):
             name="Researcher",
             fields=[
                 (
+                    "id",
+                    models.PositiveIntegerField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
                     "name",
                     models.CharField(
                         help_text="Researcher's Name",
                         max_length=50,
-                        primary_key=True,
-                        serialize=False,
+                        null=True,
                         verbose_name="Name",
                     ),
                 ),
