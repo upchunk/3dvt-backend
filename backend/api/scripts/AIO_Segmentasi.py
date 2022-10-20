@@ -192,7 +192,7 @@ def segmentation(user, image, task=None):
     print("buffer1", content_file)
     try:
         results = ImageData.objects.create(user=user, task=task, images=sources)
-        results["result"] = content_file
+        results.result = content_file
         results.save()
         buffer1.close()
         buffer2.close()

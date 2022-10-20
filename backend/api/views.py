@@ -3,7 +3,7 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.permissions import AllowAny
 from rest_framework import status, generics, viewsets
 from rest_framework.response import Response
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework.views import APIView
 
 # Import some AUTH Components
@@ -149,7 +149,7 @@ class ImageDataViewSet(viewsets.ModelViewSet):
 class SegmentationTaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskHistorySerializer
     pagination_class = StandardSetPagination
-    parser_classes = [MultiPartParser, FormParser]
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
     queryset = TaskHistory.objects.all()
     filterset_fields = ("user", "groupname", "status")
     if inDevelopment:
@@ -208,8 +208,8 @@ class SegmentationTaskViewSet(viewsets.ModelViewSet):
                 return Response(
                     {"status": "FAILED", "message": "Internal Server Error"}
                 )
-        except:
-            raise Exception("An error occurred")
+        except Exception as e:
+            raise e
 
 
 class ReconstructionTaskViewSet(viewsets.ModelViewSet):
@@ -224,6 +224,7 @@ class ReconstructionTaskViewSet(viewsets.ModelViewSet):
 class ResearcherViewSet(viewsets.ModelViewSet):
     serializer_class = ResearcherSerializer
     pagination_class = StandardSetPagination
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
     queryset = Researcher.objects.all()
     if inDevelopment:
         permission_classes = [AllowAny]
@@ -232,6 +233,7 @@ class ResearcherViewSet(viewsets.ModelViewSet):
 class LandingPageViewSet(viewsets.ModelViewSet):
     serializer_class = LandingPageSerializer
     pagination_class = StandardSetPagination
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
     queryset = LandingPage.objects.all()
     if inDevelopment:
         permission_classes = [AllowAny]
