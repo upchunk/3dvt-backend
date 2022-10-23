@@ -4,7 +4,6 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth.password_validation import validate_password
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import Group
-import arrow
 from api.models import (
     Publication,
     ImageData,
@@ -12,13 +11,7 @@ from api.models import (
     Researcher,
     TaskHistory,
     Users,
-    TaskImageMapping,
 )
-
-
-def uploaded():
-    now = arrow.now()
-    return now.format("YYYY-MM-DD-HH-mm-ss")
 
 
 class UsersSerializer(serializers.ModelSerializer):
@@ -200,9 +193,11 @@ class TaskHistorySerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class TaskImageMappingSerializer(serializers.ModelSerializer):
+class GetTaskHistorySerializer(serializers.ModelSerializer):
+    images = ImageDataSerializer(many=True)
+
     class Meta:
-        model = TaskImageMapping
+        model = TaskHistory
         fields = "__all__"
 
 

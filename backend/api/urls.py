@@ -20,7 +20,6 @@ from api.views import (
     UpdateProfileView,
     UserViewSet,
     PublicationViewSet,
-    TaskImageMappingViewSet,
 )
 
 
@@ -32,9 +31,6 @@ router.register(r"images", ImageDataViewSet, basename="image_data")
 router.register(r"segmentation", SegmentationTaskViewSet, basename="segmentation_tasks")
 router.register(
     r"reconstruction", ReconstructionTaskViewSet, basename="reconstruction_tasks"
-)
-router.register(
-    r"TaskImageMapping", TaskImageMappingViewSet, basename="TaskImageMapping"
 )
 router.register(r"landingPage", LandingPageViewSet, basename="landing_pages")
 router.register(r"researcher", ResearcherViewSet, basename="researcher")

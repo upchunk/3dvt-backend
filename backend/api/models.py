@@ -62,18 +62,13 @@ class TaskHistory(models.Model):
     createdate = models.DateTimeField(
         auto_now_add=True, help_text=_("Task Creation Date")
     )
-    sources = models.JSONField(
-        _("Source"),
-        default=list,
-        null=True,
-        help_text=_("Source Image's Url(s)"),
+    images = models.ManyToManyField(
+        "ImageData",
+        related_name="image_set",
     )
-    results = models.JSONField(
-        _("Result"),
-        default=list,
-        null=True,
-        help_text=_("Result Image's Url(s)"),
-    )
+
+    class Meta:
+        ordering = ["-id"]
 
 
 class ImageData(models.Model):
@@ -101,24 +96,17 @@ class ImageData(models.Model):
         _("result"),
         upload_to=ResultDataset,
         null=True,
-        blank=True,
         help_text=_("Image Result"),
     )
-
-
-class TaskImageMapping(models.Model):
-    Task = models.ForeignKey(
-        TaskHistory,
-        verbose_name=_("Task"),
-        on_delete=models.CASCADE,
-        help_text=_("Corresponding Task"),
+    uploaded = models.DateTimeField(
+        _("Uploaded"),
+        auto_now_add=True,
+        null=True,
+        help_text=_("Image Upload Timeframe"),
     )
-    Images = models.ForeignKey(
-        ImageData,
-        verbose_name=_("Images"),
-        on_delete=models.CASCADE,
-        help_text=_("Corresponding Task Images"),
-    )
+
+    class Meta:
+        ordering = ["-id"]
 
 
 class LandingPage(models.Model):

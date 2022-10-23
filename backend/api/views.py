@@ -16,7 +16,8 @@ from rest_framework_simplejwt.tokens import (
 from rest_framework.authtoken.models import Token
 
 from drf_spectacular.utils import extend_schema
-from .scripts.AIO_Segmentasi import segmentation
+
+from api.scripts.AIO_Segmentasi import segmentation
 
 # Import Django Components
 
@@ -33,7 +34,7 @@ from api.serializers import (
     UpdateUserSerializer,
     UsersSerializer,
     PublicationSerializer,
-    TaskImageMappingSerializer,
+    GetTaskHistorySerializer,
 )
 from api.models import (
     ImageData,
@@ -42,7 +43,6 @@ from api.models import (
     TaskHistory,
     Users,
     Publication,
-    TaskImageMapping,
 )
 from django.contrib.auth.models import Group
 
@@ -165,6 +165,11 @@ class SegmentationTaskViewSet(viewsets.ModelViewSet):
     if inDevelopment:
         permission_classes = [AllowAny]
 
+    def get_serializer_class(self):
+        if self.action == "list" or self.action == "retrieve":
+            return GetTaskHistorySerializer
+        return super().get_serializer_class()
+
     def create(self, request, *args, **kwargs):
         userid = request.user.id
         user = Users.objects.get(pk=userid)
@@ -173,36 +178,16 @@ class SegmentationTaskViewSet(viewsets.ModelViewSet):
             user=user, status="RECIEVED", type="segmentation"
         )
         images = request.FILES.getlist("images")
-        print(images)
-        source_list = []
-        result_list = []
         try:
             for img in images:
                 result = segmentation(user, img, task)
                 if result:
                     status = "SUCCESS"
-                    source_list.append(
-                        {
-                            "name": str(img),
-                            "original": result.images.url,
-                            "originalHeight": 448,
-                            "originalWidth": 448,
-                        }
-                    )
-                    result_list.append(
-                        {
-                            "name": str(img),
-                            "original": result.result.url,
-                            "originalHeight": 448,
-                            "originalWidth": 448,
-                        }
-                    )
+                    task.images.add(result)
                 else:
                     status = "FAILED"
 
             if status == "SUCCESS":
-                task.sources = source_list
-                task.results = result_list
                 task.status = status
                 task.groupname = group.name
                 task.save()
@@ -227,14 +212,6 @@ class ReconstructionTaskViewSet(viewsets.ModelViewSet):
     pagination_class = StandardSetPagination
     queryset = TaskHistory.objects.all()
     filterset_fields = ("groupname", "status")
-    if inDevelopment:
-        permission_classes = [AllowAny]
-
-
-class TaskImageMappingViewSet(viewsets.ModelViewSet):
-    serializer_class = TaskImageMappingSerializer
-    pagination_class = StandardSetPagination
-    queryset = TaskImageMapping.objects.all()
     if inDevelopment:
         permission_classes = [AllowAny]
 
