@@ -11,6 +11,7 @@ from api.models import (
     Researcher,
     TaskHistory,
     Users,
+    FileData,
 )
 
 
@@ -187,6 +188,12 @@ class ImageDataSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class FileDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FileData
+        fields = "__all__"
+
+
 class TaskHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskHistory
@@ -195,6 +202,7 @@ class TaskHistorySerializer(serializers.ModelSerializer):
 
 class GetTaskHistorySerializer(serializers.ModelSerializer):
     images = ImageDataSerializer(many=True)
+    files = FileDataSerializer(many=True)
 
     class Meta:
         model = TaskHistory

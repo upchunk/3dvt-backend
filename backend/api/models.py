@@ -11,6 +11,10 @@ def ImageDataset(instance, filename):  # explicitly set upload path and filename
     return "imageData/{user}/{name}".format(user=instance.user.id, name=filename)
 
 
+def FileDataset(instance, filename):  # explicitly set upload path and filename
+    return "fileData/{user}/{name}".format(user=instance.user.id, name=filename)
+
+
 def MappingDataset(instance, filename):  # explicitly set upload path and filename
     return "mappingData/{user}/{name}".format(user=instance.user.id, name=filename)
 
@@ -62,6 +66,7 @@ class TaskHistory(models.Model):
     createdate = models.DateTimeField(
         auto_now_add=True, help_text=_("Task Creation Date")
     )
+    files = models.ManyToManyField("FileData", related_name="file_set")
     images = models.ManyToManyField(
         "ImageData",
         related_name="image_set",
@@ -103,6 +108,38 @@ class ImageData(models.Model):
         auto_now_add=True,
         null=True,
         help_text=_("Image Upload Timeframe"),
+    )
+
+    class Meta:
+        ordering = ["-id"]
+
+
+class FileData(models.Model):
+    user = models.ForeignKey(
+        Users, on_delete=models.CASCADE, help_text=_("Corresponding user ID")
+    )
+    groupname = models.CharField(
+        max_length=50,
+        null=True,
+        help_text=_("User Group Name for this current Task"),
+    )
+    task = models.ForeignKey(
+        TaskHistory,
+        on_delete=models.CASCADE,
+        null=True,
+        help_text=_("Corresponding Task"),
+    )
+    files = models.FileField(
+        _("files"),
+        upload_to=FileDataset,
+        null=True,
+        help_text=_("File to be Processed"),
+    )
+    uploaded = models.DateTimeField(
+        _("Uploaded"),
+        auto_now_add=True,
+        null=True,
+        help_text=_("File Upload Timeframe"),
     )
 
     class Meta:

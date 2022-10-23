@@ -210,10 +210,16 @@ class SegmentationTaskViewSet(viewsets.ModelViewSet):
 class ReconstructionTaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskHistorySerializer
     pagination_class = StandardSetPagination
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
     queryset = TaskHistory.objects.all()
-    filterset_fields = ("groupname", "status")
+    filterset_fields = ("user", "groupname", "status")
     if inDevelopment:
         permission_classes = [AllowAny]
+
+    def get_serializer_class(self):
+        if self.action == "list" or self.action == "retrieve":
+            return GetTaskHistorySerializer
+        return super().get_serializer_class()
 
 
 class LandingPageViewSet(viewsets.ModelViewSet):
