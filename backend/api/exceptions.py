@@ -1,3 +1,4 @@
+import logging
 from rest_framework.views import exception_handler
 from rest_framework.exceptions import (
     Throttled,
@@ -7,7 +8,9 @@ from rest_framework.exceptions import (
     ParseError,
     PermissionDenied,
 )
-from rest_framework.response import Response
+from rest_framework.response import Response  # noqa
+
+logger = logging.getLogger(__name__)
 
 
 def custom_exception_handler(exc, context):
@@ -35,8 +38,9 @@ def custom_exception_handler(exc, context):
         }
         response.data = custom_response_data
 
-    elif isinstance(exc, Exception) and getattr(exc, "status_code", None) is None:
-        response = Response(
-            {"message": "Internal Server Error", "trace": str(exc)}, status=500
-        )
-    return response
+    # elif isinstance(exc, Exception) and getattr(exc, "status_code", None) is None:
+    #     logger.exception(exc)
+    #     response = Response(
+    #         {"message": "Internal Server Error", "trace": str(exc)}, status=500
+    #     )
+    # return response

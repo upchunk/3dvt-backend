@@ -9,7 +9,8 @@ from api.models import (
     ImageData,
     LandingPage,
     Researcher,
-    TaskHistory,
+    Reconstruction,
+    Segmentation,
     Users,
     FileData,
 )
@@ -182,9 +183,29 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         return instance
 
 
+class SegmentationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Segmentation
+        fields = "__all__"
+
+
 class ImageDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = ImageData
+        fields = "__all__"
+
+
+class GetSegmentationSerializer(serializers.ModelSerializer):
+    images = ImageDataSerializer(many=True)
+
+    class Meta:
+        model = Segmentation
+        fields = "__all__"
+
+
+class ReconstructionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Reconstruction
         fields = "__all__"
 
 
@@ -194,18 +215,11 @@ class FileDataSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class TaskHistorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TaskHistory
-        fields = "__all__"
-
-
-class GetTaskHistorySerializer(serializers.ModelSerializer):
-    images = ImageDataSerializer(many=True)
+class GetReconstructionSerializer(serializers.ModelSerializer):
     files = FileDataSerializer(many=True)
 
     class Meta:
-        model = TaskHistory
+        model = Reconstruction
         fields = "__all__"
 
 

@@ -30,19 +30,23 @@ from api.serializers import (
     MyTokenObtainPairSerializer,
     RegisterSerializer,
     ResearcherSerializer,
-    TaskHistorySerializer,
     UpdateUserSerializer,
     UsersSerializer,
     PublicationSerializer,
-    GetTaskHistorySerializer,
+    GetReconstructionSerializer,
+    GetSegmentationSerializer,
+    ReconstructionSerializer,
+    SegmentationSerializer,
 )
 from api.models import (
     ImageData,
     LandingPage,
     Researcher,
-    TaskHistory,
+    Reconstruction,
+    Segmentation,
     Users,
     Publication,
+    FileData,
 )
 from django.contrib.auth.models import Group
 
@@ -157,26 +161,24 @@ class ImageDataViewSet(viewsets.ModelViewSet):
 
 
 class SegmentationTaskViewSet(viewsets.ModelViewSet):
-    serializer_class = TaskHistorySerializer
+    serializer_class = SegmentationSerializer
     pagination_class = StandardSetPagination
     parser_classes = [MultiPartParser, FormParser, JSONParser]
-    queryset = TaskHistory.objects.all()
+    queryset = Segmentation.objects.all()
     filterset_fields = ("user", "groupname", "status")
     if inDevelopment:
         permission_classes = [AllowAny]
 
     def get_serializer_class(self):
         if self.action == "list" or self.action == "retrieve":
-            return GetTaskHistorySerializer
+            return GetSegmentationSerializer
         return super().get_serializer_class()
 
     def create(self, request, *args, **kwargs):
         userid = request.user.id
         user = Users.objects.get(pk=userid)
         group = Group.objects.get(user=user)
-        task = TaskHistory.objects.create(
-            user=user, status="RECIEVED", type="segmentation"
-        )
+        task = Segmentation.objects.create(user=user, status="RECIEVED")
         images = request.FILES.getlist("images")
         try:
             for img in images:
@@ -208,18 +210,45 @@ class SegmentationTaskViewSet(viewsets.ModelViewSet):
 
 
 class ReconstructionTaskViewSet(viewsets.ModelViewSet):
-    serializer_class = TaskHistorySerializer
+    serializer_class = ReconstructionSerializer
     pagination_class = StandardSetPagination
     parser_classes = [MultiPartParser, FormParser, JSONParser]
-    queryset = TaskHistory.objects.all()
+    queryset = Reconstruction.objects.all()
     filterset_fields = ("user", "groupname", "status")
     if inDevelopment:
         permission_classes = [AllowAny]
 
     def get_serializer_class(self):
         if self.action == "list" or self.action == "retrieve":
-            return GetTaskHistorySerializer
+            return GetReconstructionSerializer
         return super().get_serializer_class()
+
+    def create(self, request, *args, **kwargs):
+        group = Group.objects.get(user=request.user)
+        task = Reconstruction.objects.create(
+            user=request.user, groupname=group.name, status="RECIEVED"
+        )
+        files = request.FILES.getlist("files")
+        try:
+            for file in files:
+                FileObject = FileData.objects.create(
+                    user=request.user, task=task, files=file
+                )
+                task.files.add(FileObject)
+            serializer = self.get_serializer(instance=task)
+            task.status = "SAVED"
+            task.save()
+            return Response(
+                {
+                    "status": "SUCCESS",
+                    "message": "Reconstruction Model is Saved",
+                    "task_data": serializer.data,
+                }
+            )
+        except:
+            task.status = "FAILED"
+            task.save()
+            return Response({"status": "FAILED", "message": "Internal Server Error"})
 
 
 class LandingPageViewSet(viewsets.ModelViewSet):

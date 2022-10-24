@@ -40,7 +40,7 @@ class Users(AbstractUser):
     )
 
 
-class TaskHistory(models.Model):
+class Segmentation(models.Model):
 
     user = models.ForeignKey(
         Users, on_delete=models.CASCADE, help_text=_("Corresponding user ID")
@@ -58,15 +58,9 @@ class TaskHistory(models.Model):
     model = models.CharField(
         max_length=50, null=True, blank=True, help_text=_("Selected Model for the Task")
     )
-    type = models.CharField(
-        max_length=50,
-        null=True,
-        help_text=_("Type of the task, ex: 'segmentation'"),
-    )
     createdate = models.DateTimeField(
         auto_now_add=True, help_text=_("Task Creation Date")
     )
-    files = models.ManyToManyField("FileData", related_name="file_set")
     images = models.ManyToManyField(
         "ImageData",
         related_name="image_set",
@@ -86,7 +80,7 @@ class ImageData(models.Model):
         help_text=_("User Group Name for this current Task"),
     )
     task = models.ForeignKey(
-        TaskHistory,
+        Segmentation,
         on_delete=models.CASCADE,
         null=True,
         help_text=_("Corresponding Task"),
@@ -114,6 +108,36 @@ class ImageData(models.Model):
         ordering = ["-id"]
 
 
+class Reconstruction(models.Model):
+
+    user = models.ForeignKey(
+        Users, on_delete=models.CASCADE, help_text=_("Corresponding user ID")
+    )
+    groupname = models.CharField(
+        max_length=50,
+        null=True,
+        help_text=_("User Group Name for this current Task"),
+    )
+    status = models.CharField(
+        max_length=50,
+        null=True,
+        help_text=_("Task Status, ex: 'STARTED', 'FINISHED"),
+    )
+    model = models.CharField(
+        max_length=50, null=True, blank=True, help_text=_("Selected Model for the Task")
+    )
+    createdate = models.DateTimeField(
+        auto_now_add=True, help_text=_("Task Creation Date")
+    )
+    files = models.ManyToManyField(
+        "FileData",
+        related_name="file_set",
+    )
+
+    class Meta:
+        ordering = ["-id"]
+
+
 class FileData(models.Model):
     user = models.ForeignKey(
         Users, on_delete=models.CASCADE, help_text=_("Corresponding user ID")
@@ -124,7 +148,7 @@ class FileData(models.Model):
         help_text=_("User Group Name for this current Task"),
     )
     task = models.ForeignKey(
-        TaskHistory,
+        Reconstruction,
         on_delete=models.CASCADE,
         null=True,
         help_text=_("Corresponding Task"),
