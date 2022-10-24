@@ -10,11 +10,13 @@ djangorestframework
 djangorestframework-simplejwt
 drf-spectacular
 flake8
+gunicorn
 keras
 matplotlib
 numpy
 opencv-python
 Pillow
+psycopg2-binary
 pymemcache
 requests
 scikit-image

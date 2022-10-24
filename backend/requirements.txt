@@ -28,6 +28,7 @@ google-auth==2.12.0
 google-auth-oauthlib==0.4.6
 google-pasta==0.2.0
 grpcio==1.49.1
+gunicorn==20.1.0
 h5py==3.7.0
 idna==3.4
 imageio==2.22.1
@@ -54,6 +55,7 @@ pathspec==0.10.1
 Pillow==9.2.0
 platformdirs==2.5.2
 protobuf==3.19.6
+psycopg2-binary==2.9.4
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pycodestyle==2.9.1
