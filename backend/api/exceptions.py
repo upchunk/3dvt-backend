@@ -38,9 +38,9 @@ def custom_exception_handler(exc, context):
         }
         response.data = custom_response_data
 
-    # elif isinstance(exc, Exception) and getattr(exc, "status_code", None) is None:
-    #     logger.exception(exc)
-    #     response = Response(
-    #         {"message": "Internal Server Error", "trace": str(exc)}, status=500
-    #     )
-    # return response
+    elif isinstance(exc, Exception) and getattr(exc, "status_code", None) is None:
+        logger.exception(exc)
+        response = Response(
+            {"message": "Internal Server Error", "trace": str(exc)}, status=500
+        )
+    return response

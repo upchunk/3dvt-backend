@@ -50,7 +50,7 @@ from api.models import (
 )
 from django.contrib.auth.models import Group
 
-inDevelopment = True
+inDevelopment = False
 
 
 class UserViewSet(viewsets.ModelViewSet):
