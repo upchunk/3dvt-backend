@@ -78,7 +78,6 @@ class RegisterView(generics.CreateAPIView):
 
 class ChangePasswordView(generics.UpdateAPIView):
     queryset = Users.objects.all()
-    # permission_classes = [IsOwner]
     serializer_class = ChangePasswordSerializer
     if inDevelopment:
         permission_classes = [AllowAny]
@@ -86,7 +85,6 @@ class ChangePasswordView(generics.UpdateAPIView):
 
 class UpdateProfileView(generics.UpdateAPIView):
     queryset = Users.objects.all()
-    # permission_classes = [IsOwner]
     serializer_class = UpdateUserSerializer
     if inDevelopment:
         permission_classes = [AllowAny]
