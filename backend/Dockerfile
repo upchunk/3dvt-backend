@@ -13,8 +13,8 @@ RUN apt-get update \
     && apt-get upgrade -y
 
 # install requirements
-RUN pip3 install --upgrade pip
 COPY ./requirements.txt .
+RUN pip3 install --upgrade pip
 RUN pip3 install -r requirements.txt
 
 # copy entrypoint.sh
