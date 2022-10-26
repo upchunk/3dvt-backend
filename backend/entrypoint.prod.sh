@@ -11,4 +11,8 @@ then
     echo "PostgreSQL started"
 fi
 
+## Only run when first spin
+# python manage.py flush --no-input
+python manage.py migrate
+
 exec "$@"

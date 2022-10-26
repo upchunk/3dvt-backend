@@ -26,6 +26,7 @@ from api.serializers import (
     ChangePasswordSerializer,
     GroupSerializer,
     ImageDataSerializer,
+    FileDataSerializer,
     LandingPageSerializer,
     MyTokenObtainPairSerializer,
     RegisterSerializer,
@@ -205,6 +206,15 @@ class SegmentationTaskViewSet(viewsets.ModelViewSet):
                 )
         except Exception as e:
             raise e
+
+
+class FileDataViewSet(viewsets.ModelViewSet):
+    serializer_class = FileDataSerializer
+    pagination_class = StandardSetPagination
+    queryset = FileData.objects.all()
+    filterset_fields = ("user", "groupname")
+    if inDevelopment:
+        permission_classes = [AllowAny]
 
 
 class ReconstructionTaskViewSet(viewsets.ModelViewSet):

@@ -9,6 +9,7 @@ from api.views import (
     CustomAuthToken,
     GroupViewSet,
     ImageDataViewSet,
+    FileDataViewSet,
     LandingPageViewSet,
     LogoutAllView,
     LogoutView,
@@ -28,6 +29,7 @@ router = DefaultRouter()
 router.register(r"users", UserViewSet, basename="users")
 router.register(r"group", GroupViewSet, basename="groups")
 router.register(r"images", ImageDataViewSet, basename="image_data")
+router.register(r"files", FileDataViewSet, basename="file_data")
 router.register(r"segmentation", SegmentationTaskViewSet, basename="segmentation_tasks")
 router.register(
     r"reconstruction", ReconstructionTaskViewSet, basename="reconstruction_tasks"
