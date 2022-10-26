@@ -12,6 +12,10 @@ then
 fi
 
 ## Only run when first spin
+python manage.py flush --no-input
+python manage.py clearsessions
+python manage.py flushexpiredtokens
+python manage.py makemigrations
 python manage.py migrate
 python manage.py collectstatic
 
