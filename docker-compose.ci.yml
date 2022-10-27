@@ -3,6 +3,8 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile.prod
+      cache_from:
+        - "${BACKEND_IMAGE}"
     image: "${BACKEND_IMAGE}"
     command: gunicorn backend.wsgi:application --bind 0.0.0.0:8000
     expose:
