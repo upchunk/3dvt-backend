@@ -74,11 +74,6 @@ class ImageData(models.Model):
     user = models.ForeignKey(
         Users, on_delete=models.CASCADE, help_text=_("Corresponding user ID")
     )
-    groupname = models.CharField(
-        max_length=50,
-        null=True,
-        help_text=_("User Group Name for this current Task"),
-    )
     task = models.ForeignKey(
         Segmentation,
         on_delete=models.CASCADE,
@@ -141,11 +136,6 @@ class Reconstruction(models.Model):
 class FileData(models.Model):
     user = models.ForeignKey(
         Users, on_delete=models.CASCADE, help_text=_("Corresponding user ID")
-    )
-    groupname = models.CharField(
-        max_length=50,
-        null=True,
-        help_text=_("User Group Name for this current Task"),
     )
     task = models.ForeignKey(
         Reconstruction,

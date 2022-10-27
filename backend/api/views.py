@@ -157,7 +157,7 @@ class ImageDataViewSet(viewsets.ModelViewSet):
     serializer_class = ImageDataSerializer
     pagination_class = StandardSetPagination
     queryset = ImageData.objects.all()
-    filterset_fields = ("user", "groupname")
+    filterset_fields = ("user",)
     if inDevelopment:
         permission_classes = [AllowAny]
 
@@ -215,7 +215,7 @@ class FileDataViewSet(viewsets.ModelViewSet):
     serializer_class = FileDataSerializer
     pagination_class = StandardSetPagination
     queryset = FileData.objects.all()
-    filterset_fields = ("user", "groupname")
+    filterset_fields = ("user",)
     if inDevelopment:
         permission_classes = [AllowAny]
 
