@@ -39,6 +39,7 @@ from api.serializers import (
     ReconstructionSerializer,
     SegmentationSerializer,
     SuggestionsSerializer,
+    SuggestionDetailSerializer,
 )
 from api.models import (
     ImageData,
@@ -294,6 +295,11 @@ class SuggestionsViewSet(viewsets.ModelViewSet):
     if inDevelopment:
         permission_classes = [AllowAny]
 
+    def get_serializer_class(self):
+        if self.action == "list" or self.action == "retrieve":
+            return SuggestionDetailSerializer
+        return super().get_serializer_class()
+
     def create(self, request, *args, **kwargs):
-        request.data["user  "] = request.user.id
+        request.data["user"] = request.user.id
         return super().create(request, *args, **kwargs)

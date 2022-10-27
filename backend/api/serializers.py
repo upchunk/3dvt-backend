@@ -258,3 +258,11 @@ class SuggestionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Suggestions
         fields = "__all__"
+
+
+class SuggestionDetailSerializer(serializers.ModelSerializer):
+    user = UsersSerializer(read_only=True)
+
+    class Meta:
+        model = Suggestions
+        fields = "__all__"
