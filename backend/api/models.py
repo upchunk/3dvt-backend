@@ -235,3 +235,10 @@ class Researcher(models.Model):
         null=True,
         help_text=_("Optional kwargs for Researcher Section"),
     )
+
+
+class Suggestions(models.Model):
+    user = models.ForeignKey(
+        Users, on_delete=models.CASCADE, help_text=_("Suggestions's Writer")
+    )
+    text = models.TextField(null=True, blank=True, help_text=_("Suggestions's Text"))

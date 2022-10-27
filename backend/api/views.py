@@ -38,6 +38,7 @@ from api.serializers import (
     GetSegmentationSerializer,
     ReconstructionSerializer,
     SegmentationSerializer,
+    SuggestionsSerializer,
 )
 from api.models import (
     ImageData,
@@ -48,6 +49,7 @@ from api.models import (
     Users,
     Publication,
     FileData,
+    Suggestions,
 )
 from django.contrib.auth.models import Group
 
@@ -281,5 +283,13 @@ class PublicationViewSet(viewsets.ModelViewSet):
     serializer_class = PublicationSerializer
     pagination_class = StandardSetPagination
     queryset = Publication.objects.all()
+    if inDevelopment:
+        permission_classes = [AllowAny]
+
+
+class SuggestionsViewSet(viewsets.ModelViewSet):
+    serializer_class = SuggestionsSerializer
+    pagination_class = StandardSetPagination
+    queryset = Suggestions.objects.all()
     if inDevelopment:
         permission_classes = [AllowAny]

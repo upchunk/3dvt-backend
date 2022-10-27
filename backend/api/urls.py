@@ -21,6 +21,7 @@ from api.views import (
     UpdateProfileView,
     UserViewSet,
     PublicationViewSet,
+    SuggestionsViewSet,
 )
 
 
@@ -37,6 +38,7 @@ router.register(
 router.register(r"landingPage", LandingPageViewSet, basename="landing_pages")
 router.register(r"researcher", ResearcherViewSet, basename="researcher")
 router.register(r"publication", PublicationViewSet, basename="publication")
+router.register(r"suggestions", SuggestionsViewSet, basename="suggestions")
 
 urlpatterns = [
     path("token/", MyTokenObtainPairView.as_view(), name="token_obtain_pair"),

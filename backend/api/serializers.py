@@ -13,6 +13,7 @@ from api.models import (
     Segmentation,
     Users,
     FileData,
+    Suggestions,
 )
 
 
@@ -250,4 +251,10 @@ class ResearcherSerializer(serializers.ModelSerializer):
 class PublicationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Publication
+        fields = "__all__"
+
+
+class SuggestionsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Suggestions
         fields = "__all__"
