@@ -293,3 +293,7 @@ class SuggestionsViewSet(viewsets.ModelViewSet):
     queryset = Suggestions.objects.all()
     if inDevelopment:
         permission_classes = [AllowAny]
+
+    def create(self, request, *args, **kwargs):
+        request.data["user  "] = request.user.id
+        return super().create(request, *args, **kwargs)

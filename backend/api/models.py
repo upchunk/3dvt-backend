@@ -241,4 +241,7 @@ class Suggestions(models.Model):
     user = models.ForeignKey(
         Users, on_delete=models.CASCADE, help_text=_("Suggestions's Writer")
     )
+    subject = models.CharField(
+        max_length=50, null=True, help_text=_("Suggestions's Subject")
+    )
     text = models.TextField(null=True, blank=True, help_text=_("Suggestions's Text"))
