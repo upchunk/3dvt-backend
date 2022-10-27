@@ -54,6 +54,8 @@ from api.models import (
 )
 from django.contrib.auth.models import Group
 
+from api.permissions import isStaffOrReadOnly
+
 inDevelopment = False
 
 
@@ -264,6 +266,7 @@ class ReconstructionTaskViewSet(viewsets.ModelViewSet):
 class LandingPageViewSet(viewsets.ModelViewSet):
     serializer_class = LandingPageSerializer
     pagination_class = StandardSetPagination
+    permission_classes = [isStaffOrReadOnly]
     parser_classes = [MultiPartParser, FormParser, JSONParser]
     queryset = LandingPage.objects.all()
     if inDevelopment:
@@ -273,6 +276,7 @@ class LandingPageViewSet(viewsets.ModelViewSet):
 class ResearcherViewSet(viewsets.ModelViewSet):
     serializer_class = ResearcherSerializer
     pagination_class = StandardSetPagination
+    permission_classes = [isStaffOrReadOnly]
     parser_classes = [MultiPartParser, FormParser, JSONParser]
     queryset = Researcher.objects.all()
     if inDevelopment:
@@ -282,6 +286,7 @@ class ResearcherViewSet(viewsets.ModelViewSet):
 class PublicationViewSet(viewsets.ModelViewSet):
     serializer_class = PublicationSerializer
     pagination_class = StandardSetPagination
+    permission_classes = [isStaffOrReadOnly]
     queryset = Publication.objects.all()
     if inDevelopment:
         permission_classes = [AllowAny]
