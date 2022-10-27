@@ -179,8 +179,9 @@ class SegmentationTaskViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         userid = request.user.id
         user = Users.objects.get(pk=userid)
-        group = Group.objects.get(user=user)
-        task = Segmentation.objects.create(user=user, status="RECIEVED")
+        task = Segmentation.objects.create(
+            user=user, groupname=request.user.institution, status="RECIEVED"
+        )
         images = request.FILES.getlist("images")
         try:
             for img in images:
@@ -193,7 +194,6 @@ class SegmentationTaskViewSet(viewsets.ModelViewSet):
 
             if status == "SUCCESS":
                 task.status = status
-                task.groupname = group.name
                 task.save()
                 serializer = self.get_serializer(instance=task)
                 return Response(
@@ -235,9 +235,8 @@ class ReconstructionTaskViewSet(viewsets.ModelViewSet):
         return super().get_serializer_class()
 
     def create(self, request, *args, **kwargs):
-        group = Group.objects.get(user=request.user)
         task = Reconstruction.objects.create(
-            user=request.user, groupname=group.name, status="RECIEVED"
+            user=request.user, groupname=request.user.institution, status="RECIEVED"
         )
         files = request.FILES.getlist("files")
         try:
