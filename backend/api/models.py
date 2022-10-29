@@ -8,7 +8,7 @@ from backend.settings import AUTHOR_MSG
 
 
 def upload_to(instance, filename):  # explicitly set upload path and filename
-    return "images/{user}/{name}".format(user=instance.user.id, name=filename)
+    return "images/{user}/{name}".format(user=instance, name=filename)
 
 
 def ImageDataset(instance, filename):  # explicitly set upload path and filename

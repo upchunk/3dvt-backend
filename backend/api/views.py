@@ -63,7 +63,8 @@ inDevelopment = False
 
 class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UsersSerializer
-    parser_classes = (MultiPartParser, FormParser)
+    pagination_class = SmallSetPagination
+    parser_classes = (JSONParser, MultiPartParser, FormParser)
     filterset_fields = ("groups",)
     queryset = Users.objects.all()
     if inDevelopment:
