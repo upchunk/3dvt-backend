@@ -9,8 +9,7 @@ ENV PYTHONUNBUFFERED 1
 
 # install psycopg2 dependencies
 RUN apt-get update \
-    && apt-get install postgresql postgresql-contrib ffmpeg libsm6 libxext6 netcat -y \
-    && apt-get upgrade -y
+    && apt-get install postgresql postgresql-contrib ffmpeg libsm6 libxext6 netcat -y
 
 # install requirements
 COPY ./requirements.txt .
