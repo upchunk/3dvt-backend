@@ -1,5 +1,7 @@
 from rest_framework import pagination
 
+# API Backend by : Habibul Rahman Qalbi
+
 
 class LargeSetPagination(pagination.PageNumberPagination):
     page_size = 1000

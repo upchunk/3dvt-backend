@@ -58,6 +58,8 @@ from api.permissions import isStaffOrReadOnly
 
 inDevelopment = False
 
+# API Backend by : Habibul Rahman Qalbi
+
 
 class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UsersSerializer

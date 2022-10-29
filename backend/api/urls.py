@@ -4,6 +4,8 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
+# API Backend by : Habibul Rahman Qalbi
+
 from api.views import (
     ChangePasswordView,
     CustomAuthToken,

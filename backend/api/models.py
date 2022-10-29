@@ -1,6 +1,10 @@
+# API Backend by : Habibul Rahman Qalbi
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
+
+from backend.settings import AUTHOR_MSG
 
 
 def upload_to(instance, filename):  # explicitly set upload path and filename
@@ -235,3 +239,6 @@ class Suggestions(models.Model):
         max_length=50, null=True, help_text=_("Suggestions's Subject")
     )
     text = models.TextField(null=True, blank=True, help_text=_("Suggestions's Text"))
+
+
+print(AUTHOR_MSG)

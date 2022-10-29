@@ -8,11 +8,16 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
-"""
 
+This API Backend is Developed By : Habibul Rahman Qalbi
+
+"""
 from django.utils.timezone import timedelta
 from pathlib import Path
 import os
+
+AUTHOR_MSG = "This API Backend is Developed By : Habibul Rahman Qalbi"
+print(AUTHOR_MSG)
 
 # Environment Variables
 USE_SPACES = "TRUE"

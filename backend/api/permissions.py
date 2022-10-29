@@ -2,6 +2,8 @@ from rest_framework import permissions
 
 SAFE_METHODS = ("GET", "HEAD", "OPTIONS")
 
+# API Backend by : Habibul Rahman Qalbi
+
 
 class IsStaff(permissions.BasePermission):
     def has_permission(self, request, view):

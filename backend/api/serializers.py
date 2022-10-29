@@ -16,6 +16,8 @@ from api.models import (
     Suggestions,
 )
 
+# API Backend by : Habibul Rahman Qalbi
+
 
 class UsersSerializer(serializers.ModelSerializer):
     class Meta:
