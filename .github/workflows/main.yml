@@ -4,11 +4,9 @@ on:
   push:
     branches:
       - develop
-      - debug
   pull_request:
     branches:
       - develop
-      - debug
 
 env:
   BACKEND_IMAGE: ghcr.io/$(echo $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]')/app_backend
@@ -61,7 +59,7 @@ jobs:
     name: Deploy to DigitalOcean
     runs-on: ubuntu-latest
     needs: build
-    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/debug'
+    if: github.ref == 'refs/heads/develop'
     steps:
       - name: Checkout develop
         uses: actions/checkout@v3
