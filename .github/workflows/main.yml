@@ -27,8 +27,8 @@ jobs:
           echo "SQL_ENGINE=django.db.backends.postgresql" >> .env
           echo "DATABASE=postgres" >> .env
           echo "DJANGO_ALLOWED_HOSTS='${{ secrets.DJANGO_ALLOWED_HOSTS }}'" >> .env
-          echo "CORS_ALLOWED_ORIGINS='http://3dvtusg.com:8000 http://localhost:8000 http://127.0.0.1:8000'" >> .env
-          echo "CSRF_TRUSTED_ORIGINS='http://3dvtusg.com:8000 http://localhost:8000 http://127.0.0.1:8000'" >> .env
+          echo "CORS_ALLOWED_ORIGINS='https://3dvtusg.com:8000 https://localhost:8000 https://127.0.0.1:8000'" >> .env
+          echo "CSRF_TRUSTED_ORIGINS='https://3dvtusg.com:8000 https://localhost:8000 https://127.0.0.1:8000'" >> .env
           echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
           echo "SQL_DATABASE=${{ secrets.SQL_DATABASE }}" >> .env
           echo "SQL_USER=${{ secrets.SQL_USER }}" >> .env
@@ -72,8 +72,8 @@ jobs:
           echo "SQL_ENGINE=django.db.backends.postgresql_psycopg2" >> .env
           echo "DATABASE=postgres" >> .env
           echo "DJANGO_ALLOWED_HOSTS='${{ secrets.DJANGO_ALLOWED_HOSTS }}'" >> .env
-          echo "CORS_ALLOWED_ORIGINS='http://3dvtusg.com:8000 http://localhost:8000 http://127.0.0.1:8000'" >> .env
-          echo "CSRF_TRUSTED_ORIGINS='http://3dvtusg.com:8000 http://localhost:8000 http://127.0.0.1:8000'" >> .env
+          echo "CORS_ALLOWED_ORIGINS='https://3dvtusg.com:8000 https://localhost:8000 https://127.0.0.1:8000'" >> .env
+          echo "CSRF_TRUSTED_ORIGINS='https://3dvtusg.com:8000 https://localhost:8000 https://127.0.0.1:8000'" >> .env
           echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
           echo "SQL_DATABASE=${{ secrets.SQL_DATABASE }}" >> .env
           echo "SQL_USER=${{ secrets.SQL_USER }}" >> .env
