@@ -23,6 +23,8 @@ RUN chmod +x /app/backend/entrypoint.prod.sh
 
 # copy project
 COPY . /app/backend/
+# why do we need to specify the folder to deploy to the server
+# Specify folder that inside of the Django code
 COPY api /app/backend/api/
 COPY backend /app/backend/backend
 
