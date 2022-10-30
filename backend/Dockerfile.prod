@@ -23,6 +23,8 @@ RUN chmod +x /app/backend/entrypoint.prod.sh
 
 # copy project
 COPY . /app/backend/
+COPY api /app/backend/api/
+COPY backend /app/backend/backend
 
 # run entrypoint.prod.sh
 ENTRYPOINT ["/app/backend/entrypoint.prod.sh"]
