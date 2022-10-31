@@ -13,16 +13,20 @@ RUN apt-get update \
     && apt-get install postgresql postgresql-contrib ffmpeg libsm6 libxext6 netcat -y
 
 # install dependencies
-COPY ./requirements.txt .
+COPY ./requirements.txt /app/backend/
 RUN pip3 install --upgrade pip
-RUN pip3 install -r requirements.txt
+RUN pip3 install -r requirements.txt --no-cache-dir
 
 # copy entrypoint-prod.sh
-COPY ./entrypoint.prod.sh .
+COPY ./entrypoint.prod.sh /app/backend/
 RUN chmod +x /app/backend/entrypoint.prod.sh
 
 # copy project
-COPY . .
+COPY . /app/backend/
+# why do we need to specify the folder to deploy to the server
+# Specify folder that inside of the Django code
+COPY api /app/backend/api/
+COPY backend /app/backend/backend
 
 # run entrypoint.prod.sh
 ENTRYPOINT ["/app/backend/entrypoint.prod.sh"]
