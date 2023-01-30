@@ -15,6 +15,9 @@ from keras.layers import (
     concatenate,
     Conv2DTranspose,
     Dropout,
+    BatchNormalization,
+    MaxPool2D,
+    Activation,
 )
 from keras.utils import normalize
 import cv2
@@ -143,7 +146,7 @@ def encoder_block( input, num_filters):
 #skip features gets input from encoder for concatenation
 def decoder_block( input, skip_features, num_filters):
     x = Conv2DTranspose(num_filters, (2, 2), strides=2, padding="same")(input)
-    x = Concatenate()([x, skip_features])
+    x = concatenate()([x, skip_features])
     x = conv_block(x, num_filters)
     return x
 #Build Unet using the blocks
