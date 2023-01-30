@@ -18,10 +18,6 @@ jobs:
     steps:
       - name: Checkout develop
         uses: actions/checkout@v3
-        with:
-          lfs: true
-      - name: Checkout LFS objects
-        run: git lfs checkout
       - name: Add environment variables to Github
         run: |
           echo "DEBUG=True" >> .env
@@ -67,10 +63,6 @@ jobs:
     steps:
       - name: Checkout develop
         uses: actions/checkout@v3
-        with:
-          lfs: true
-      - name: Checkout LFS objects
-        run: git lfs checkout
       - name: Add environment variables to .env
         run: |
           echo "DEBUG=True" >> .env
