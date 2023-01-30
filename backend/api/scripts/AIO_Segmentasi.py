@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue Aug 30 19:04:30 2022
-
 @author: artak
 """
 
@@ -15,10 +14,6 @@ from keras.layers import (
     concatenate,
     Conv2DTranspose,
     Dropout,
-    BatchNormalization,
-    MaxPool2D,
-    Activation,
-    Concatenate,
 )
 from keras.utils import normalize
 import cv2
@@ -130,48 +125,15 @@ def simple_unet_model(IMG_HEIGHT, IMG_WIDTH, IMG_CHANNELS):
 
     return model
 
-def conv_block( input, num_filters):
-    x = Conv2D(num_filters, 3, padding="same")(input)
-    x = BatchNormalization()(x)   #Not in the original network. 
-    x = Activation("relu")(x)
-    x = Conv2D(num_filters, 3, padding="same")(x)
-    x = BatchNormalization()(x)  #Not in the original network
-    x = Activation("relu")(x)
-    return x
-#Encoder block: Conv block followed by maxpooling
-def encoder_block( input, num_filters):
-    x = conv_block(input, num_filters)
-    p = MaxPool2D((2, 2))(x)
-    return x, p   
-#Decoder block
-#skip features gets input from encoder for concatenation
-def decoder_block( input, skip_features, num_filters):
-    x = Conv2DTranspose(num_filters, (2, 2), strides=2, padding="same")(input)
-    x = Concatenate()([x, skip_features])
-    x = conv_block(x, num_filters)
-    return x
-#Build Unet using the blocks
-def build_unet( IMG_HEIGHT, IMG_WIDTH, IMG_CHANNELS):
-    input_shape = (IMG_HEIGHT, IMG_WIDTH, IMG_CHANNELS)
-    inputs = Input(input_shape)
-    s1, p1 = encoder_block(inputs, 64)
-    s2, p2 = encoder_block(p1, 128)
-    s3, p3 = encoder_block(p2, 256)
-    s4, p4 = encoder_block(p3, 512)
-    b1 = conv_block(p4, 1024) #Bridge
-    d1 = decoder_block(b1, s4, 512)
-    d2 = decoder_block(d1, s3, 256)
-    d3 = decoder_block(d2, s2, 128)
-    d4 = decoder_block(d3, s1, 64)
-    outputs = Conv2D(1, 1, padding="same", activation="sigmoid")(d4)  #Binary (can be multiclass)
-    model = Model(inputs, outputs, name="U-Net")
-    return model
+
+# Input image config to model
+
 
 def get_model():
-    IMG_HEIGHT   = 256
-    IMG_WIDTH    = 256
+    IMG_HEIGHT = 448
+    IMG_WIDTH = 448
     IMG_CHANNELS = 1
-    return build_unet(IMG_HEIGHT, IMG_WIDTH, IMG_CHANNELS)
+    return simple_unet_model(IMG_HEIGHT, IMG_WIDTH, IMG_CHANNELS)
 
 
 # Looping segmentation images on folder choosed
@@ -180,7 +142,7 @@ def get_model():
 # ------------- MAIN FUNCTION ---------------------------------#
 # Load Pretrained Model
 model = get_model()
-model.load_weights("api/scripts/Model-Final-Tesis.hdf5")
+model.load_weights("api/scripts/model_tesis_epoch20_sz448.hdf5")
 
 
 def segmentation(user, image, task=None):
