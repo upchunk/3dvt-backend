@@ -45,4 +45,4 @@ py manage.py runserver
 
 ### Documentation
 
-#### Open: [localhost:8000/docs](http://localhost:8000/docs) to access the Swagger UI Documentation 
+#### Open: [localhost:8000/docs](http://localhost:8000/docs) to access the Swagger UI Documentation
